@@ -1,0 +1,10 @@
+.menu-item {
+    display: flex;
+    font-size: 3rem;
+    margin-left: 0 !important ;
+
+    &:hover {
+        background-color: var(--primary-color);
+        color: var(--white-color);
+    }
+}

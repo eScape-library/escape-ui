@@ -1,0 +1,90 @@
+@import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@200;300;400;500;700;900&display=swap');
+
+:root {
+    --primary-color: #bb9244;
+    --text-color: #3a4752;
+    --white-color: #fefbf6;
+    --background-hover: rgba(22, 24, 35, 0.03);
+
+    --default-width: 1200px;
+    --default-layout-horizontal-spacer: 32px;
+}
+
+html {
+    font-size: 62.5%;
+    color: #3a4752;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 1.6rem;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.5;
+    text-rendering: optimizespeed;
+}
+
+button,
+input,
+[tabindex] {
+    border: none;
+    outline: none;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+    margin-top: 0;
+    vertical-align: top;
+    width: 20px;
+    height: 20px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    cursor: pointer;
+    outline: 0 !important;
+}
+
+h1 {
+    font-size: 36px;
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    list-style: none;
+}
+
+p {
+    margin: 0;
+}
+
+// Scrollbar CSS
+
+html *::-webkit-scrollbar {
+    border-radius: 0;
+    width: 8px;
+}
+
+html *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+html *::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+}

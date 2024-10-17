@@ -1,0 +1,33 @@
+.pagination-filter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 90px;
+}
+
+.item-pagi ~ .item-pagi {
+    margin-left: 15px;
+}
+
+.item-pagi {
+    width: 36px;
+    height: 36px;
+    border-radius: 100%;
+    font-size: 20px;
+    border: 1px solid #dce0ef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #dce0ef;
+    cursor: pointer;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.item-pagi.active,
+.item-pagi:hover {
+    color: #000000;
+    border-color: #000000;
+}
