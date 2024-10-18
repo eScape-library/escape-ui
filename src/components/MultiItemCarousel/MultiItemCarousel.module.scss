@@ -1,0 +1,134 @@
+.wrapper {
+    padding: 17px 15px;
+    margin: 40px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.container {
+    margin: 16px 20px;
+    overflow: hidden;
+}
+
+.sliders {
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 0 15px;
+    transition: ease 1000ms;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 35px;
+    border-bottom: 3px solid #000000;
+}
+
+.header-title {
+    font-size: 21px;
+    font-weight: 500;
+}
+
+.header-seemore {
+    font-size: 16px;
+    color: var(--primary);
+    cursor: pointer;
+}
+
+.poduct {
+    display: inline-block;
+    width: 255px;
+    margin-right: 40px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.name {
+    font-weight: 400;
+    font-size: 18px;
+    height: 24px;
+    overflow: hidden;
+    display: block;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    text-overflow: ellipsis;
+
+    &:hover {
+        cursor: pointer;
+        color: var(--primary-blue);
+    }
+}
+
+.author {
+    font-size: 14px;
+    color: #888888;
+}
+
+.prev-btn,
+.next-btn {
+    position: absolute;
+    font-size: 24px;
+    padding: 16px;
+    top: 50%;
+    transform: translateY(-30%);
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        color: var(--primary);
+    }
+}
+
+.prev-btn {
+    left: 0;
+}
+.next-btn {
+    right: 0;
+}
+
+.active {
+    color: #dedede;
+
+    &:hover {
+        color: #dedede;
+        cursor: default;
+    }
+}
+
+// tablet and mobile
+@media (max-width: 1023px) {
+    .prev-btn,
+    .next-btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+// tablet
+@media (min-width: 740px) and (max-width: 1023px) {
+    .wrapper {
+        width: 750px;
+    }
+
+    .prev-btn,
+    .next-btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+//mobile
+@media (max-width: 739px) {
+    .wrapper {
+        width: 380px;
+    }
+
+    .sliders {
+        margin: 0;
+    }
+
+    .book {
+        margin-right: 10px;
+    }
+}

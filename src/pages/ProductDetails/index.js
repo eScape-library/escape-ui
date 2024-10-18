@@ -1,9 +1,25 @@
 import classNames from 'classnames/bind';
 import styles from './ProductDetails.module.scss';
+import { useState } from 'react';
+
+import MultiItemCarousel from '../../components/MultiItemCarousel';
 
 const cx = classNames.bind(styles);
 
 function ProductDetails() {
+    const [tabInfo, setTabInfo] = useState(true);
+    const [tabStorage, setTabStorage] = useState(false);
+
+    const handleTabStorage = () => {
+        setTabStorage(true);
+        setTabInfo(false);
+    };
+
+    const handleTabInfo = () => {
+        setTabStorage(false);
+        setTabInfo(true);
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -56,7 +72,7 @@ function ProductDetails() {
                         <div className={cx('info-product-detail')}>
                             <div className={cx('heading-product-detail')}>
                                 <div className={cx('title-product-detail')}>
-                                    <h1>MLB - Áo thun unisex cổ tròn tay ngắn Sportive Varsity Track</h1>
+                                    <h1>Áo thun unisex cổ tròn tay ngắn Sportive Varsity Track</h1>
                                 </div>
                                 <div className={cx('wishlist-product-detail')}>
                                     <a href="#" className={cx('sharing-product')}>
@@ -210,8 +226,55 @@ function ProductDetails() {
                                 </div>
                             </div>
                         </div>
+                        <div className={cx('description-product-detail')}>
+                            <div className={cx('wrapper-description')}>
+                                <div className={cx('tab-description')}>
+                                    <div
+                                        className={cx('item-tab-des', tabInfo ? 'active' : '')}
+                                        onClick={handleTabInfo}
+                                    >
+                                        THÔNG TIN SẢN PHẨM
+                                    </div>
+                                    <div
+                                        className={cx('item-tab-des', tabStorage ? 'active' : '')}
+                                        onClick={handleTabStorage}
+                                    >
+                                        HƯỚNG DẪN BẢO QUẢN
+                                    </div>
+                                </div>
+                                <div className={cx('content-tab-description')}>
+                                    <div className={cx('item-content-tab', tabInfo ? 'active' : '')}>
+                                        <div>
+                                            <p>
+                                                Lấy cảm hứng từ phong cách Varsity trẻ trung, năng động của các trường
+                                                đại học Mỹ, chiếc áo thun Sportive Varsity Track hứa hẹn mang đến cho
+                                                bạn sự bứt phá cá tính cũng như thoải mái tối đa trong mọi hoạt động.
+                                                Với điểm nhấn nổi bật là họa tiết chữ và logo cỡ lớn, kết hợp cùng màu
+                                                sắc trẻ trung, hãy sở hữu ngay Sportive Varsity Track để thể hiện phong
+                                                cách riêng biệt của bạn!
+                                            </p>
+                                        </div>
+                                        <p>Thương hiệu: eScape</p>
+                                        <div>Xuất xứ: Việt Nam</div>
+                                        <div>Giới tính: Unisex</div>
+                                        <div>Kiểu dáng: Áo thun</div>
+                                        <div>Màu sắc: Black, Ivoiry</div>
+                                    </div>
+                                    <div className={cx('item-content-tab', tabStorage ? 'active' : '')}>
+                                        <span className={cx('ui-provider')} dir="ltr">
+                                            Giặt ở nhiệt độ tối đa 30 độ
+                                        </span>
+                                        <div>Không dùng chất tẩy</div>
+                                        <div>Phơi trong bóng râm</div>
+                                        <div>Không phơi trực tiếp dưới ánh nắng mặt trời</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <MultiItemCarousel title="Có thể bạn cũng thích" />
+                <MultiItemCarousel title="Sản phẩm đã xem" />
             </div>
         </div>
     );

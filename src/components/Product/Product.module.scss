@@ -51,6 +51,12 @@
         font-weight: 500;
         padding-bottom: 10px;
     }
+
+    a {
+        word-wrap: break-word;
+        white-space: normal;
+        overflow: hidden;
+    }
 }
 
 .price {
