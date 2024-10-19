@@ -2,6 +2,8 @@ import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 
 import Menu from '../../../components/Popper/Menu';
+import MiniSearch from '../../../components/MiniSearch';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +20,7 @@ const datas = [
 ];
 
 function Header() {
+    const [showSearch, setShowSearch] = useState(false);
     return (
         <header className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -47,7 +50,12 @@ function Header() {
                     </nav>
                 </div>
                 <div className={cx('right')}>
-                    <div className={cx('right-icon', 'search-icon')}>
+                    <div
+                        className={cx('right-icon', 'search-icon')}
+                        onClick={() => {
+                            setShowSearch(true);
+                        }}
+                    >
                         <a className={cx('')} href="#">
                             <img
                                 src="https://file.hstatic.net/200000642007/file/icon-search_f3577f42c6314038a0636c20100bd8d9.svg"
@@ -94,6 +102,7 @@ function Header() {
                     </div>
                 </div>
             </div>
+            <MiniSearch showSearch={showSearch} callback={(data) => setShowSearch(data)} />
         </header>
     );
 }

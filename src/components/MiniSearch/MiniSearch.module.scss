@@ -1,0 +1,162 @@
+.wrapper {
+    position: fixed;
+    top: 0;
+    z-index: 9;
+    background: #ffffff;
+    min-height: 584px;
+    width: 100%;
+}
+
+.wrapper.active {
+    display: block;
+}
+
+.mini-search-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 56px 0;
+    position: relative;
+}
+
+.form-search {
+    position: relative;
+
+    button {
+        border: none;
+        background: transparent;
+        outline: none;
+        box-shadow: none;
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+.clear-text-search {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 55px;
+    bottom: 10px;
+    cursor: pointer;
+}
+
+.input-search {
+    border: none;
+    height: 48px;
+    border-bottom: 3px solid #000000;
+    padding: 0 15px;
+    width: 100%;
+    outline: none;
+    box-shadow: none;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+}
+
+.result-search {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 104px);
+    background: #ffffff;
+    z-index: 9;
+}
+
+.list-result-search {
+    padding: 30px 0;
+}
+
+.close-mini-search {
+    position: absolute;
+    top: 48px;
+    right: 48px;
+    width: 56px;
+    height: 56px;
+    border: 1px solid #e8e8e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    cursor: pointer;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+.history-search {
+    margin-top: 40px;
+
+    ul {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    li {
+        border: 1px solid #e8e8e8;
+        border-radius: 18px;
+        padding: 7px 12px;
+        margin: 0 5px 5px 0;
+        cursor: pointer;
+
+        &:hover {
+            border-color: #000000;
+            background: #000000;
+            a {
+                color: #ffffff;
+            }
+        }
+    }
+}
+
+.title-history {
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+
+    h4 {
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 24px;
+        margin: 0;
+    }
+}
+
+.clear-key-search {
+    margin-left: 8px;
+    color: #787878;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 20px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.item-product-search {
+    display: flex;
+    align-items: center;
+}
+
+.media-product-search {
+    width: 48px;
+}
+
+.title-product-search {
+    width: calc(100% - 48px);
+    padding-left: 12px;
+}
