@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     min-width: 100px;
-    height: 40px;
+    min-height: 40px;
     padding: 9px 16px;
     background-color: transparent;
     border-radius: 4px;
@@ -27,22 +27,21 @@
 }
 
 .defaultBtn {
-    color: var(--primary-blue);
-    border-color: var(--primary-blue);
+    color: black;
+    border: 1px solid #e8e8e8;
 
     &:hover {
-        background-color: var(--primary-blue);
-        color: var(--white-color);
+        color: var(--primary-color);
     }
 }
 
 .primary {
-    color: var(--primary);
-    border-color: var(--primary);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
     border-radius: 92px;
 
     &:hover {
-        background-color: var(--primary);
+        background-color: var(--primary-color);
         color: var(--white-color);
     }
 }
@@ -60,7 +59,7 @@
 }
 
 .fullfill {
-    background-color: var(--primary-blue);
+    background-color: black;
     color: var(--white-color);
 }
 

@@ -6,6 +6,12 @@
     align-items: center;
     height: 100vh; /* Full screen height */
     background-color: #f0f0f0;
+
+    p {
+        margin-top: 20px;
+        font-size: 1.5rem;
+        color: #555;
+    }
 }
 
 .spinner {
@@ -24,10 +30,4 @@
     100% {
         transform: rotate(360deg);
     }
-}
-
-p {
-    margin-top: 20px;
-    font-size: 1.5rem;
-    color: #555;
 }

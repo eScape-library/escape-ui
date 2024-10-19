@@ -1,0 +1,68 @@
+.heading-account-info {
+    border-bottom: 3px solid #000000;
+    padding: 0 0 8px 0;
+    margin: 0 0 16px 0;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+}
+
+.item-account-info {
+    display: flex;
+    align-items: center;
+
+    label {
+        width: 220px;
+    }
+}
+
+.item-account-info ~ .item-account-info {
+    margin-top: 20px;
+}
+
+.form-account-info {
+    border-top: 1px solid var(--border-color);
+    padding-top: 48px;
+    margin-top: 24px;
+}
+
+.email-account-info {
+    padding: 24px 20px 0 20px;
+    margin-top: 24px;
+    border-top: 1px solid #e8e8e8;
+}
+
+.item-input-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 430px;
+
+    label {
+        margin: 0 0 8px 0;
+        position: relative;
+        width: max-content;
+    }
+}
+
+.required:after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 100%;
+    background: #f55060;
+    display: block;
+    position: absolute;
+    top: 6px;
+    right: -8px;
+}
+
+.form-input {
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    height: 44px;
+    padding: 12px 16px;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+}

@@ -1,0 +1,24 @@
+.heading-account-recently {
+    border-bottom: 3px solid #000000;
+    padding: 0 0 8px 0;
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title-account-recently {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+}
+
+.content-account-wishlist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 4px;
+}
+
+.product-loop {
+    width: calc(25% - 4px);
+}

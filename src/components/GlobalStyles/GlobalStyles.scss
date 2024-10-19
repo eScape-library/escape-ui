@@ -4,8 +4,9 @@
 :root {
     --primary-color: #bb9244;
     --text-color: #3a4752;
-    --white-color: #fefbf6;
+    --white-color: #fff;
     --background-hover: rgba(22, 24, 35, 0.03);
+    --border-color: #e8e8e8;
 
     --default-width: 1200px;
     --default-layout-horizontal-spacer: 32px;
@@ -13,7 +14,6 @@
 
 html {
     font-size: 62.5%;
-    color: #3a4752;
 }
 
 * {
@@ -163,7 +163,7 @@ h1 {
 }
 
 a {
-    color: var(--text-color);
+    color: black;
     text-decoration: none;
 }
 
