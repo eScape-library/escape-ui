@@ -1,10 +1,13 @@
+import { useState } from 'react';
+import Popup from '../../components/Popup';
+
 import classNames from 'classnames/bind';
 import styles from './Cart.module.scss';
-import { useState } from 'react';
-
+import UpdateCart from '../../components/UpdateCart';
 const cx = classNames.bind(styles);
 
 function Cart() {
+    const [showPopup, setShowPopup] = useState(false);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container-wrapper-cart')}>
@@ -47,9 +50,7 @@ function Cart() {
                                     <a
                                         href="javascript:void(0);"
                                         className={cx('change-option')}
-                                        data-url="/products/mlb-ao-polo-nu-co-be-tay-dai-basic-small-logo-3fpqb0141-2"
-                                        data-variant-id="1125249423"
-                                        data-quantity="1"
+                                        onClick={() => setShowPopup(!showPopup)}
                                     >
                                         Thay đổi tùy chọn
                                     </a>
@@ -267,6 +268,11 @@ function Cart() {
                     </div>
                 </div>
             </div>
+            {showPopup && (
+                <Popup setShowPopup={setShowPopup}>
+                    <UpdateCart />
+                </Popup>
+            )}
         </div>
     );
 }

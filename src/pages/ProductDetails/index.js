@@ -3,6 +3,8 @@ import styles from './ProductDetails.module.scss';
 import { useState } from 'react';
 
 import MultiItemCarousel from '../../components/MultiItemCarousel';
+import SwatchColor from '../../components/SwatchColor';
+import SwatchSize from '../../components/SwatchSize';
 
 const cx = classNames.bind(styles);
 
@@ -132,29 +134,7 @@ function ProductDetails() {
                             <div className={cx('price-product-detail')}>
                                 <span>1,690,000₫</span>
                             </div>
-                            <div className={cx('swatch-color')} data-index="option1">
-                                <div
-                                    className={cx('item-swatch')}
-                                    data-url="/products/mlb-ao-thun-unisex-co-tron-tay-ngan-sportive-varsity-track-3atsv2143-1"
-                                    data-pid="1055531526"
-                                >
-                                    <img
-                                        src="https://product.hstatic.net/200000642007/product/icon_43bks_3atsv2143_f05621cba4bd4f908c17ca5f0b0dc5a2_80a084a3b2fe45eabd62cee76666e342.jpg"
-                                        alt="43bks"
-                                    />
-                                </div>
-                                <div
-                                    className={cx('item-swatch', 'active')}
-                                    data-url="/products/mlb-ao-thun-unisex-co-tron-tay-ngan-sportive-varsity-track-3atsv2143-2"
-                                    data-pid="1055531528"
-                                >
-                                    <img
-                                        src="https://product.hstatic.net/200000642007/product/icon_50ivs_3atsv2143_83535f06639c421aaa54eadfd96ccbd3_23b45f737e9442689ba5b4d41d58539c.jpg"
-                                        alt="50ivs"
-                                    />
-                                </div>
-                            </div>
-
+                            <SwatchColor />
                             <div className={cx('selector-product-detail')}>
                                 <div className={cx('selector-product-detail-inner')}>
                                     <div className={cx('option-swatch')}>
@@ -186,23 +166,8 @@ function ProductDetails() {
                                                 Hướng dẫn kích thước
                                             </span>
                                         </div>
-                                        <div className={cx('swatch-size')} data-index="option2">
-                                            <div className={cx('item-swatch')} data-option2="XS">
-                                                XS
-                                            </div>
-                                            <div className={cx('item-swatch')} data-option2="S">
-                                                S
-                                            </div>
-                                            <div className={cx('item-swatch')} data-option2="M">
-                                                M
-                                            </div>
-                                            <div className={cx('item-swatch', 'active')} data-option2="L">
-                                                L
-                                            </div>
-                                            <div className={cx('item-swatch', 'soldout')} data-option2="XL">
-                                                XL
-                                            </div>
-                                        </div>
+
+                                        <SwatchSize />
                                     </div>
 
                                     <div className={cx('action-detail')}>
