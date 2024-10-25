@@ -3,24 +3,29 @@ import styles from './Header.module.scss';
 
 import Menu from '../../../components/Popper/Menu';
 import MiniSearch from '../../../components/MiniSearch';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import * as CategoryService from '../../../apiServices/categoryService';
+import * as SubCategoryService from '../../../apiServices/subCategoryService';
 
 const cx = classNames.bind(styles);
 
-const datas = [
-    {
-        name: 'Áo thun',
-    },
-    {
-        name: 'Áo sơ mi',
-    },
-    {
-        name: 'Áo khoác lông',
-    },
-];
-
 function Header() {
     const [showSearch, setShowSearch] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [subCategories, setsubCategories] = useState([]);
+
+    useEffect(() => {
+        SubCategoryService.getSubCategoryByCategoryID()
+            .then((data) => setsubCategories(data))
+            .catch((err) => console.log(err));
+        window.scrollTo(0, 0);
+    }, []);
+    useEffect(() => {
+        CategoryService.getAllCategories()
+            .then((data) => setCategories(data))
+            .catch((err) => console.log(err));
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <header className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -30,21 +35,17 @@ function Header() {
                 <div className={cx('menu')}>
                     <nav>
                         <ul>
-                            <li>
-                                <Menu datas={datas}>
-                                    <p className={cx('nav-item')}>ÁO QUẦN</p>
-                                </Menu>
-                            </li>
-                            <li>
-                                <Menu datas={datas}>
-                                    <p className={cx('nav-item')}>ÁO QUẦN</p>
-                                </Menu>
-                            </li>
-                            <li>
-                                <Menu datas={datas}>
-                                    <p className={cx('nav-item')}>ÁO QUẦN</p>
-                                </Menu>
-                            </li>
+                            {categories.map((category, index) => (
+                                <li key={index}>
+                                    <Menu
+                                        datas={subCategories.filter(
+                                            (subCat) => subCat.categoryId == category.categoryId,
+                                        )}
+                                    >
+                                        <p className={cx('nav-item')}>{category.categoryName}</p>
+                                    </Menu>
+                                </li>
+                            ))}
                             <li className={cx('line-menu')}>|</li>
                         </ul>
                     </nav>
