@@ -4,17 +4,29 @@ import styles from './Category.module.scss';
 import Product from '../../components/Product';
 import Pagination from '../../components/Pagination';
 import Filter from '../../components/Filter';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
+import * as collectionService from '../../apiServices/collectionService';
 
 const cx = classNames.bind(styles);
 
 function Category() {
+    const location = useLocation();
     const [toggleFilter, setToggleFilter] = useState(false);
-
+    const [collection, setCollection] = useState([]);
+    let { subCategoryId } = useParams();
+    const { collectionName } = location.state || {};
+    useEffect(() => {
+        collectionService
+            .getCollection(subCategoryId)
+            .then((data) => setCollection(data))
+            .catch((err) => console.log(err));
+        window.scrollTo(0, 0);
+    }, [subCategoryId]);
     return (
         <div className={cx('wrapper', toggleFilter ? 'show-filter' : '')}>
             <div className={cx('main-title')}>
-                <h1>Áo thun</h1>
+                <h1>{collectionName}</h1>
             </div>
             <div className={cx('title-collection')}>
                 <div className={cx('title-collection-inner')}>
@@ -130,24 +142,26 @@ function Category() {
                 </div>
             </div>
             <div className={cx('content-collection')}>
-                <div className="grid">
-                    <div className="row">
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
-                        <Product className="col l-3" />
+                {collection.length > 0 ? (
+                    <div className="grid">
+                        <div className="row">
+                            {collection.map((item, index) => (
+                                <Product className="col l-3" data={item} key={index} />
+                            ))}
+                        </div>
+
+                        <Pagination />
                     </div>
-                </div>
+                ) : (
+                    <div className={cx('empty-product')}>
+                        <img
+                            src="https://file.hstatic.net/200000642007/file/nodata_713db710dfaa4e8c903efadc0e3db0af.png"
+                            alt="Vớ"
+                        />
+                        <span>Hiện nhóm sản phẩm chưa cập nhật sản phẩm</span>
+                    </div>
+                )}
             </div>
-            <Pagination />
             <Filter isShowFilter={toggleFilter} setShowFilter={(toggleFilter) => setToggleFilter(toggleFilter)} />
             <div className={cx('overflay-filter')}></div>
         </div>

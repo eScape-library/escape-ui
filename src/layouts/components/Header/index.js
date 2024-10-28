@@ -42,7 +42,7 @@ function Header() {
                                             (subCat) => subCat.categoryId == category.categoryId,
                                         )}
                                     >
-                                        <p className={cx('nav-item')}>{category.categoryName}</p>
+                                        <p className={cx('nav-item')}>{category.categoryName.toUpperCase()}</p>
                                     </Menu>
                                 </li>
                             ))}

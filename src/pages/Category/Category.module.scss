@@ -119,3 +119,18 @@
     left: 0;
     z-index: 9;
 }
+
+.empty-product {
+    padding: 120px 0 140px 0;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    span {
+        display: block;
+        width: 100%;
+        color: #bcbcbc;
+        margin-top: 20px;
+    }
+}
