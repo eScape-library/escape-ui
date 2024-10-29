@@ -13,12 +13,17 @@ const cx = classNames.bind(styles);
 function Category() {
     const location = useLocation();
     const [toggleFilter, setToggleFilter] = useState(false);
-    const [collection, setCollection] = useState([]);
+    const [collection, setCollection] = useState({});
     let { subCategoryId } = useParams();
     const { collectionName } = location.state || {};
+    const paging = {
+        pageSize: 12,
+        pageNumber: 1,
+    };
+
     useEffect(() => {
         collectionService
-            .getCollection(subCategoryId)
+            .getCollection(subCategoryId, paging)
             .then((data) => setCollection(data))
             .catch((err) => console.log(err));
         window.scrollTo(0, 0);
@@ -142,15 +147,20 @@ function Category() {
                 </div>
             </div>
             <div className={cx('content-collection')}>
-                {collection.length > 0 ? (
+                {collection.items && collection.items.length > 0 ? (
                     <div className="grid">
                         <div className="row">
-                            {collection.map((item, index) => (
+                            {collection.items.map((item, index) => (
                                 <Product className="col l-3" data={item} key={index} />
                             ))}
                         </div>
 
-                        <Pagination />
+                        <Pagination
+                            id={subCategoryId}
+                            totalRecord={collection.total}
+                            pageSize={paging.pageSize}
+                            callback={(data) => setCollection(data)}
+                        />
                     </div>
                 ) : (
                     <div className={cx('empty-product')}>
