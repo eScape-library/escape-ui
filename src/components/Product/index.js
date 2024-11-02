@@ -12,12 +12,12 @@ const sample = [
             'https://product.hstatic.net/200000642007/product/07pkm_3atsn0343_2_7346ec7ae281413f98fb06f39a4aa10a_001fff5cf976498b825497b3ad5deebe_master.jpg',
         productName: 'Áo thun unisex cổ tròn tay ngắn Vintage Big Logo Graphic',
         price: '1,690,000',
-        otherColors: 'Pink,White',
+        availableColors: 'Pink,White',
     },
 ];
 
 function Product({ className, data = sample }) {
-    var orthers = data.otherColors.split(',');
+    var orthers = data.availableColors.split(',');
 
     return (
         <div className={className}>

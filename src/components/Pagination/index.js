@@ -13,15 +13,7 @@ function Pagination({ id, totalRecord, pageSize, callback }) {
     let isNextButtonDisabled = page === lastPage;
     let isPreviousButtonDisabled = page === 1;
     useEffect(() => {
-        var paging = {
-            pageNumber: page,
-            pageSize,
-        };
-        collectionService
-            .getCollection(id, paging)
-            .then((data) => callback(data))
-            .catch((err) => console.log(err));
-        window.scrollTo(0, 0);
+        callback(page);
     }, [page]);
 
     const handleNextPage = () => {

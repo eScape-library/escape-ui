@@ -1,14 +1,37 @@
 import classNames from 'classnames/bind';
 import styles from './Filter.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function Filter({ isShowFilter, setShowFilter }) {
+function Filter({ isShowFilter, setShowFilter, callback, totalRecord }) {
     const [isColorActive, setColorActive] = useState(false);
     const [isSizeActive, setSizeActive] = useState(false);
     const [isPriceActive, setPriceActive] = useState(false);
+    const [filters, setFilters] = useState({ color: [], size: [], price: '' });
 
+    const handleCheckboxChange = (event) => {
+        const { value, checked, type } = event.target; // include `type`
+        const [filterType, val] = value.split(':');
+
+        setFilters((prevFilters) => {
+            let updatedList;
+
+            if (type === 'checkbox') {
+                updatedList = checked
+                    ? [...prevFilters[filterType], val] // add if checked
+                    : prevFilters[filterType].filter((item) => item !== val); // remove if unchecked
+            } else if (type === 'radio') {
+                updatedList = checked ? val : '';
+            }
+
+            return { ...prevFilters, [filterType]: updatedList };
+        });
+    };
+    useEffect(() => {
+        console.log(filters);
+        callback(filters);
+    }, [filters]);
     return (
         <div className={cx(isShowFilter ? 'show-filter' : '')}>
             <div className={cx('wrapper')}>
@@ -47,6 +70,7 @@ function Filter({ isShowFilter, setShowFilter }) {
                                 data-content="Filter2"
                                 onClick={() => {
                                     setColorActive(!isColorActive);
+                                    setFilters({ ...filters });
                                 }}
                             >
                                 <h4>Màu sắc</h4>
@@ -67,83 +91,35 @@ function Filter({ isShowFilter, setShowFilter }) {
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                data-content="Filter2"
-                                className={cx('content-item-filter', 'mausac', isColorActive ? 'active' : '')}
-                            >
+                            <div className={cx('content-item-filter', 'mausac', isColorActive ? 'active' : '')}>
                                 <ul>
-                                    <li>
-                                        <input id="filter2-den" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-den">
-                                            <span className={cx('den')}>Đen</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-trang" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-trang">
-                                            <span className={cx('trang')}>Trắng</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-do" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-do">
-                                            <span className={cx('do')}>Đỏ</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-xam" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-xam">
-                                            <span className={cx('xam')}>Xám</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-xanh-duong" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-xanh-duong">
-                                            <span className={cx('xanh-duong')}>Xanh dương</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-hong" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-hong">
-                                            <span className={cx('hong')}>Hồng</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-vang" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-vang">
-                                            <span className={cx('vang')}>Vàng</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-tim" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-tim">
-                                            <span className={cx('tim')}>Tím</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-nau" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-nau">
-                                            <span className={cx('nau')}>Nâu</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-xanh-la" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-xanh-la">
-                                            <span className={cx('xanh-la')}>Xanh lá</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-nude" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-nude">
-                                            <span className={cx('nude')}>Nude</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input id="filter2-cam" type="checkbox" className={cx('input-filter')} />
-                                        <label htmlFor="filter2-cam">
-                                            <span className={cx('cam')}>Cam</span>
-                                        </label>
-                                    </li>
+                                    {[
+                                        'Black',
+                                        'White',
+                                        'Red',
+                                        'Gray',
+                                        'Blue',
+                                        'Pink',
+                                        'Yellow',
+                                        'Violet',
+                                        'Brown',
+                                        'Green',
+                                        'Nude',
+                                        'Orange',
+                                    ].map((color) => (
+                                        <li key={color}>
+                                            <input
+                                                id={`color-${color}`}
+                                                type="checkbox"
+                                                value={`color:${color}`}
+                                                className={cx('input-filter')}
+                                                onChange={handleCheckboxChange}
+                                            />
+                                            <label htmlFor={`color-${color}`}>
+                                                <span className={cx(`${color}`)}>{color}</span>
+                                            </label>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                         </div>
@@ -173,275 +149,28 @@ function Filter({ isShowFilter, setShowFilter }) {
                                     </svg>
                                 </div>
                             </div>
-                            <div
-                                data-content="Filter4"
-                                className={cx('content-item-filter', 'filter-size', isSizeActive ? 'active' : '')}
-                            >
+                            <div className={cx('content-item-filter', 'filter-size', isSizeActive ? 'active' : '')}>
                                 <div className={cx('item-filter-size')} data-size="1">
                                     <label>Quần áo</label>
                                     <ul>
-                                        <li className={cx('item-size-text')}>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="XS"
-                                                id="filter4-XS"
-                                            />
-                                            <label htmlFor="filter4-XS">
-                                                <span>XS</span>
-                                            </label>
-                                        </li>
-                                        <li className={cx('item-size-text')}>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="S"
-                                                id="filter4-S"
-                                            />
-                                            <label htmlFor="filter4-S">
-                                                <span>S</span>
-                                            </label>
-                                        </li>
-                                        <li className={cx('item-size-text')}>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="M"
-                                                id="filter4-M"
-                                            />
-                                            <label htmlFor="filter4-M">
-                                                <span>M</span>
-                                            </label>
-                                        </li>
-                                        <li className={cx('item-size-text')}>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="L"
-                                                id="filter4-L"
-                                            />
-                                            <label htmlFor="filter4-L">
-                                                <span>L</span>
-                                            </label>
-                                        </li>
-                                        <li className={cx('item-size-text')}>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="XL"
-                                                id="filter4-XL"
-                                            />
-                                            <label htmlFor="filter4-XL">
-                                                <span>XL</span>
-                                            </label>
-                                        </li>
-                                        <li className={cx('item-size-text')}>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="XXL"
-                                                id="filter4-XXL"
-                                            />
-                                            <label htmlFor="filter4-XXL">
-                                                <span>XXL</span>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className={cx('item-filter-size')} data-size="2">
-                                    <label>Giày dép</label>
-                                    <ul>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="230"
-                                                id="filter4-230"
-                                            />
-                                            <label htmlFor="filter4-230">
-                                                <span>230</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="235"
-                                                id="filter4-235"
-                                            />
-                                            <label htmlFor="filter4-235">
-                                                <span>235</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="240"
-                                                id="filter4-240"
-                                            />
-                                            <label htmlFor="filter4-240">
-                                                <span>240</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="245"
-                                                id="filter4-245"
-                                            />
-                                            <label htmlFor="filter4-245">
-                                                <span>245</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="250"
-                                                id="filter4-250"
-                                            />
-                                            <label htmlFor="filter4-250">
-                                                <span>250</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="255"
-                                                id="filter4-255"
-                                            />
-                                            <label htmlFor="filter4-255">
-                                                <span>255</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="260"
-                                                id="filter4-260"
-                                            />
-                                            <label htmlFor="filter4-260">
-                                                <span>260</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="265"
-                                                id="filter4-265"
-                                            />
-                                            <label htmlFor="filter4-265">
-                                                <span>265</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="270"
-                                                id="filter4-270"
-                                            />
-                                            <label htmlFor="filter4-270">
-                                                <span>270</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="275"
-                                                id="filter4-275"
-                                            />
-                                            <label htmlFor="filter4-275">
-                                                <span>275</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="280"
-                                                id="filter4-280"
-                                            />
-                                            <label htmlFor="filter4-280">
-                                                <span>280</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="285"
-                                                id="filter4-285"
-                                            />
-                                            <label htmlFor="filter4-285">
-                                                <span>285</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="290"
-                                                id="filter4-290"
-                                            />
-                                            <label htmlFor="filter4-290">
-                                                <span>290</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="295"
-                                                id="filter4-295"
-                                            />
-                                            <label htmlFor="filter4-295">
-                                                <span>295</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                type="checkbox"
-                                                className={cx('input-filter')}
-                                                name="filter4"
-                                                value="300"
-                                                id="filter4-300"
-                                            />
-                                            <label htmlFor="filter4-300">
-                                                <span>300</span>
-                                            </label>
-                                        </li>
+                                        {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((size) => (
+                                            <li key={size} className={cx('item-size-text')}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={`size:${size}`}
+                                                    className={cx('input-filter')}
+                                                    onChange={handleCheckboxChange}
+                                                    id={`${size}`}
+                                                />
+                                                <label htmlFor={`${size}`}>
+                                                    <span>{size}</span>
+                                                </label>
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                             </div>
                         </div>
-
                         <div className={cx('item-filter-sidebar')}>
                             <div
                                 className={cx('title-item-filter', isPriceActive ? 'active' : '')}
@@ -478,8 +207,8 @@ function Filter({ isShowFilter, setShowFilter }) {
                                             type="radio"
                                             className={cx('input-filter')}
                                             name="filter-price"
-                                            value="(price_variant:product < 1000000)"
-                                            data-price="1000000"
+                                            value="price:lt-1000000"
+                                            onChange={handleCheckboxChange}
                                             id="price-filter-1"
                                         />
                                         <label htmlFor="price-filter-1">Dưới 1,000,000đ</label>
@@ -489,8 +218,8 @@ function Filter({ isShowFilter, setShowFilter }) {
                                             type="radio"
                                             className={cx('input-filter')}
                                             name="filter-price"
-                                            value="(price_variant:product range 1000000_2000000)"
-                                            data-price="1000000_2000000"
+                                            value="price:bt-1000000_2000000"
+                                            onChange={handleCheckboxChange}
                                             id="price-filter-2"
                                         />
                                         <label htmlFor="price-filter-2">1,000,000đ - 2,000,000đ</label>
@@ -500,8 +229,8 @@ function Filter({ isShowFilter, setShowFilter }) {
                                             type="radio"
                                             className={cx('input-filter')}
                                             name="filter-price"
-                                            value="(price_variant:product range 2000000_3000000)"
-                                            data-price="2000000_3000000"
+                                            value="price:bt-2000000_3000000"
+                                            onChange={handleCheckboxChange}
                                             id="price-filter-3"
                                         />
                                         <label htmlFor="price-filter-3">2,000,000đ - 3,000,000đ</label>
@@ -511,8 +240,8 @@ function Filter({ isShowFilter, setShowFilter }) {
                                             type="radio"
                                             className={cx('input-filter')}
                                             name="filter-price"
-                                            value="(price_variant:product > 4000000)"
-                                            data-price="4000000"
+                                            value="price:gt-4000000)"
+                                            onChange={handleCheckboxChange}
                                             id="price-filter-4"
                                         />
                                         <label htmlFor="price-filter-4">Trên 4,000,000đ</label>
@@ -567,9 +296,9 @@ function Filter({ isShowFilter, setShowFilter }) {
                             </div>
                         </div>
                     </div>
-                    <div className={cx('total-filter')}>
+                    <div className={cx('total-filter')} onClick={() => setShowFilter(!isShowFilter)}>
                         <div className={cx('view-filter')}>
-                            Xem <span>145</span> sản phẩm
+                            Xem <span>{totalRecord}</span> sản phẩm
                         </div>
                     </div>
                 </div>

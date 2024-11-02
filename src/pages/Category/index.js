@@ -11,23 +11,34 @@ import * as collectionService from '../../apiServices/collectionService';
 const cx = classNames.bind(styles);
 
 function Category() {
+    const pageSize = 12;
     const location = useLocation();
-    const [toggleFilter, setToggleFilter] = useState(false);
-    const [collection, setCollection] = useState({});
     let { subCategoryId } = useParams();
     const { collectionName } = location.state || {};
-    const paging = {
-        pageSize: 12,
-        pageNumber: 1,
-    };
+    const [toggleFilter, setToggleFilter] = useState(false);
+    const [collection, setCollection] = useState({});
+    const [page, setPage] = useState(1);
+    const [orderBy, setOrderBy] = useState(null);
+    const [whereClause, setWhereClause] = useState(null);
 
     useEffect(() => {
+        const orderByClause = orderBy?.split('-');
+        const paging = {
+            pageSize: pageSize,
+            pageNumber: page,
+            orderBy:
+                orderByClause !== undefined && orderByClause.length === 2
+                    ? 'ORDER BY ' + orderByClause[0] + ' ' + orderByClause[1]
+                    : null,
+            whereClause: JSON.stringify(whereClause),
+        };
         collectionService
             .getCollection(subCategoryId, paging)
             .then((data) => setCollection(data))
             .catch((err) => console.log(err));
         window.scrollTo(0, 0);
-    }, [subCategoryId]);
+    }, [subCategoryId, orderBy, whereClause, page]);
+
     return (
         <div className={cx('wrapper', toggleFilter ? 'show-filter' : '')}>
             <div className={cx('main-title')}>
@@ -126,20 +137,17 @@ function Category() {
                                 </svg>
                             </div>
                             <div className={cx('sort-collection')}>
-                                <select className="sort-by select2-hidden-accessible" tabIndex="-1" aria-hidden="true">
+                                <select
+                                    className="sort-by select2-hidden-accessible"
+                                    tabIndex="-1"
+                                    aria-hidden="true"
+                                    onChange={(e) => setOrderBy(e.target.value)}
+                                >
                                     <option value="">Sắp xếp</option>
-                                    <option value="price-ascending" data-filter="&amp;sortby=(price:product=asc)">
-                                        Giá: Tăng dần
-                                    </option>
-                                    <option value="price-descending" data-filter="&amp;sortby=(price:product=desc)">
-                                        Giá: Giảm dần
-                                    </option>
-                                    <option value="title-ascending" data-filter="&amp;sortby=(title:product=asc)">
-                                        Tên: A-Z
-                                    </option>
-                                    <option value="title-descending" data-filter="&amp;sortby=(price:product=desc)">
-                                        Tên: Z-A
-                                    </option>
+                                    <option value="Price-asc">Giá: Tăng dần</option>
+                                    <option value="Price-desc">Giá: Giảm dần</option>
+                                    <option value="ProductName-asc">Tên: A-Z</option>
+                                    <option value="ProductName-desc">Tên: Z-A</option>
                                 </select>
                             </div>
                         </div>
@@ -147,7 +155,7 @@ function Category() {
                 </div>
             </div>
             <div className={cx('content-collection')}>
-                {collection.items && collection.items.length > 0 ? (
+                {collection?.items && collection?.items.length > 0 ? (
                     <div className="grid">
                         <div className="row">
                             {collection.items.map((item, index) => (
@@ -158,8 +166,8 @@ function Category() {
                         <Pagination
                             id={subCategoryId}
                             totalRecord={collection.total}
-                            pageSize={paging.pageSize}
-                            callback={(data) => setCollection(data)}
+                            pageSize={pageSize}
+                            callback={(data) => setPage(data)}
                         />
                     </div>
                 ) : (
@@ -172,7 +180,15 @@ function Category() {
                     </div>
                 )}
             </div>
-            <Filter isShowFilter={toggleFilter} setShowFilter={(toggleFilter) => setToggleFilter(toggleFilter)} />
+            <Filter
+                isShowFilter={toggleFilter}
+                setShowFilter={(toggleFilter) => setToggleFilter(toggleFilter)}
+                callback={(filters) => {
+                    setWhereClause(filters);
+                    setPage(1);
+                }}
+                totalRecord={collection.total}
+            />
             <div className={cx('overflay-filter')}></div>
         </div>
     );
