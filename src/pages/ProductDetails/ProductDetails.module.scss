@@ -32,7 +32,7 @@ h1 {
 
 .product-detail {
     width: 50%;
-    padding-left: 44px;
+    padding-right: 44px;
 }
 
 .button-control {
@@ -77,7 +77,7 @@ h1 {
     margin: 18px 0;
 
     span {
-        font-size: 20px;
+        font-size: 22px;
         line-height: 28px;
         font-weight: 500;
     }
@@ -199,4 +199,9 @@ h1 {
 
 .item-content-tab.active {
     display: block;
+}
+
+.control-btn {
+    font-size: 35px;
+    color: black;
 }

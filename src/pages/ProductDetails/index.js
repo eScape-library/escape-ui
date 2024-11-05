@@ -1,16 +1,22 @@
 import classNames from 'classnames/bind';
 import styles from './ProductDetails.module.scss';
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import MultiItemCarousel from '../../components/MultiItemCarousel';
 import SwatchColor from '../../components/SwatchColor';
 import SwatchSize from '../../components/SwatchSize';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import * as ProductDetailsService from '../../apiServices/productDetailsService';
 
 const cx = classNames.bind(styles);
 
 function ProductDetails() {
     const [tabInfo, setTabInfo] = useState(true);
     const [tabStorage, setTabStorage] = useState(false);
+    const [product, setProduct] = useState({});
+    const [sizeVariants, setSizeVariants] = useState([]);
+    let { productDetailsId } = useParams();
 
     const handleTabStorage = () => {
         setTabStorage(true);
@@ -22,6 +28,23 @@ function ProductDetails() {
         setTabInfo(true);
     };
 
+    useEffect(() => {
+        var variant = product.variants?.filter((variant) => {
+            for (const element of variant.variantSize) {
+                if (element.productDetailsId === product.product?.productDetailsId) return true;
+            }
+        });
+
+        if (variant !== undefined) setSizeVariants(variant[0]?.variantSize);
+    }, [product]);
+
+    useEffect(() => {
+        ProductDetailsService.getProductDetailsById(productDetailsId)
+            .then((data) => setProduct(data))
+            .catch((err) => console.log(err));
+        window.scrollTo(0, 0);
+    }, [productDetailsId]);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -30,18 +53,10 @@ function ProductDetails() {
                         <div id="carouselExample" className="carousel slide">
                             <div className="carousel-inner">
                                 <div className="carousel-item active">
-                                    <img
-                                        src="https://product.hstatic.net/200000642007/product/50ivs_3atsv2143_1_bc24aeae61864aac8fd717a2e5837448_34181f53e68d4b439b1bc95d333cbd79_master.jpg"
-                                        className="d-block w-100"
-                                        alt="..."
-                                    />
+                                    <img src={product.product?.productImage} className="d-block w-100" alt="..." />
                                 </div>
                                 <div className="carousel-item">
-                                    <img
-                                        src="https://product.hstatic.net/200000642007/product/50ivs_3atsv2143_2_c2e6791e82104364a58844934033e4ed_8bc50bc8e4404c819ea48eab8e7615ef_master.jpg"
-                                        className="d-block w-100"
-                                        alt="..."
-                                    />
+                                    <img src={product.product?.subImage} className="d-block w-100" alt="..." />
                                 </div>
                             </div>
                             <button
@@ -50,10 +65,7 @@ function ProductDetails() {
                                 data-bs-target="#carouselExample"
                                 data-bs-slide="prev"
                             >
-                                <span
-                                    className={cx('button-control', 'carousel-control-prev-icon')}
-                                    aria-hidden="true"
-                                ></span>
+                                <FontAwesomeIcon className={cx('control-btn')} icon={faChevronLeft} />
                                 <span className="visually-hidden">Previous</span>
                             </button>
                             <button
@@ -62,10 +74,7 @@ function ProductDetails() {
                                 data-bs-target="#carouselExample"
                                 data-bs-slide="next"
                             >
-                                <span
-                                    className={cx('button-control', 'carousel-control-next-icon')}
-                                    aria-hidden="true"
-                                ></span>
+                                <FontAwesomeIcon className={cx('control-btn')} icon={faChevronRight} />
                                 <span className="visually-hidden">Next</span>
                             </button>
                         </div>
@@ -74,7 +83,7 @@ function ProductDetails() {
                         <div className={cx('info-product-detail')}>
                             <div className={cx('heading-product-detail')}>
                                 <div className={cx('title-product-detail')}>
-                                    <h1>Áo thun unisex cổ tròn tay ngắn Sportive Varsity Track</h1>
+                                    <h1>{product.product?.productName}</h1>
                                 </div>
                                 <div className={cx('wishlist-product-detail')}>
                                     <a href="#" className={cx('sharing-product')}>
@@ -132,9 +141,9 @@ function ProductDetails() {
                                 </div>
                             </div>
                             <div className={cx('price-product-detail')}>
-                                <span>1,690,000₫</span>
+                                <span>{product.product?.price}₫</span>
                             </div>
-                            <SwatchColor />
+                            <SwatchColor data={product.variants} activeColor={product.product?.color} />
                             <div className={cx('selector-product-detail')}>
                                 <div className={cx('selector-product-detail-inner')}>
                                     <div className={cx('option-swatch')}>
@@ -167,7 +176,7 @@ function ProductDetails() {
                                             </span>
                                         </div>
 
-                                        <SwatchSize />
+                                        <SwatchSize data={sizeVariants} activeSize={product.product?.size} />
                                     </div>
 
                                     <div className={cx('action-detail')}>
@@ -210,20 +219,8 @@ function ProductDetails() {
                                 <div className={cx('content-tab-description')}>
                                     <div className={cx('item-content-tab', tabInfo ? 'active' : '')}>
                                         <div>
-                                            <p>
-                                                Lấy cảm hứng từ phong cách Varsity trẻ trung, năng động của các trường
-                                                đại học Mỹ, chiếc áo thun Sportive Varsity Track hứa hẹn mang đến cho
-                                                bạn sự bứt phá cá tính cũng như thoải mái tối đa trong mọi hoạt động.
-                                                Với điểm nhấn nổi bật là họa tiết chữ và logo cỡ lớn, kết hợp cùng màu
-                                                sắc trẻ trung, hãy sở hữu ngay Sportive Varsity Track để thể hiện phong
-                                                cách riêng biệt của bạn!
-                                            </p>
+                                            <p>{product.product?.description}</p>
                                         </div>
-                                        <p>Thương hiệu: eScape</p>
-                                        <div>Xuất xứ: Việt Nam</div>
-                                        <div>Giới tính: Unisex</div>
-                                        <div>Kiểu dáng: Áo thun</div>
-                                        <div>Màu sắc: Black, Ivoiry</div>
                                     </div>
                                     <div className={cx('item-content-tab', tabStorage ? 'active' : '')}>
                                         <span className={cx('ui-provider')} dir="ltr">
@@ -238,7 +235,7 @@ function ProductDetails() {
                         </div>
                     </div>
                 </div>
-                <MultiItemCarousel title="Có thể bạn cũng thích" />
+                <MultiItemCarousel title="Có thể bạn cũng thích" datas={product.familiar} />
                 <MultiItemCarousel title="Sản phẩm đã xem" />
             </div>
         </div>

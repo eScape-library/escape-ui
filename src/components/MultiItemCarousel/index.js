@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -22,19 +22,25 @@ const items = [
     },
 ];
 
-function MultiItemCarousel({ datas = items, title, className }) {
-    let countClick = useRef(datas.length / 5);
-    let boodWidth = 255;
-    let move = boodWidth * 5;
+function MultiItemCarousel({ datas, title, className }) {
+    const maxProductPerSlide = 5;
+    const boodWidth = 295;
+    const move = boodWidth * maxProductPerSlide;
     let prevDisabled, nextDisabled;
     const navigate = useNavigate();
 
-    const [limit, setLimit] = useState(countClick.current);
+    const [limit, setLimit] = useState(1);
     const [state, setState] = useState(0);
     const [loading, setLoading] = useState(false);
 
     if (limit <= 1) nextDisabled = true;
-    if (limit >= countClick.current) prevDisabled = true;
+    if (limit >= datas?.length / maxProductPerSlide) prevDisabled = true;
+
+    useEffect(() => {
+        if (datas?.length > 0) {
+            setLimit(datas?.length / maxProductPerSlide);
+        }
+    }, [datas?.length]);
 
     const handleNextSlide = () => {
         if (limit <= 1) {
@@ -46,7 +52,7 @@ function MultiItemCarousel({ datas = items, title, className }) {
     };
 
     const handlePrevSlide = () => {
-        if (limit >= countClick.current) {
+        if (limit >= datas?.length / maxProductPerSlide) {
             return;
         } else {
             setLimit((prev) => prev + 1);
@@ -68,33 +74,35 @@ function MultiItemCarousel({ datas = items, title, className }) {
     //     return <LoadingModal show={loading} />;
     // }
     return (
-        <div className={classes}>
-            <div className={cx('header')}>
-                <h4 className={cx('header-title')}>{title}</h4>
-            </div>
+        datas && (
+            <div className={classes}>
+                <div className={cx('header')}>
+                    <h4 className={cx('header-title')}>{title}</h4>
+                </div>
 
-            <div className={cx('container')}>
-                <div className={cx('sliders')} style={{ transform: `translate3d(${-state}px, 0, 0)` }}>
-                    {items.map((product, index) => (
-                        <div key={index} className={cx('poduct')}>
-                            <Product data={product} />
-                        </div>
-                    ))}
+                <div className={cx('container')}>
+                    <div className={cx('sliders')} style={{ transform: `translate3d(${-state}px, 0, 0)` }}>
+                        {datas?.map((product, index) => (
+                            <div key={index} className={cx('poduct')}>
+                                <Product data={product} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className={cx('control-btn')}>
+                    <FontAwesomeIcon
+                        className={cx('prev-btn', { active: prevDisabled })}
+                        icon={faChevronLeft}
+                        onClick={handlePrevSlide}
+                    />
+                    <FontAwesomeIcon
+                        className={cx('next-btn', { active: nextDisabled })}
+                        icon={faChevronRight}
+                        onClick={handleNextSlide}
+                    />
                 </div>
             </div>
-            <div className={cx('control-btn')}>
-                <FontAwesomeIcon
-                    className={cx('prev-btn', { active: prevDisabled })}
-                    icon={faChevronLeft}
-                    onClick={handlePrevSlide}
-                />
-                <FontAwesomeIcon
-                    className={cx('next-btn', { active: nextDisabled })}
-                    icon={faChevronRight}
-                    onClick={handleNextSlide}
-                />
-            </div>
-        </div>
+        )
     );
 }
 

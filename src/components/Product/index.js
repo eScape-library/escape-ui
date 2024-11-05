@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './Product.module.scss';
 import { colors } from '../../sampleDatas';
-
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 const sample = [
@@ -18,9 +18,13 @@ const sample = [
 
 function Product({ className, data = sample }) {
     var orthers = data.availableColors.split(',');
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate(`/details/${data.productDetailsId}`);
+    };
 
     return (
-        <div className={className}>
+        <div className={className} onClick={handleClick}>
             <div className={cx('media')}>
                 <a className={cx('image')}>
                     <picture>

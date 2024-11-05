@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react';
 const cx = classNames.bind(styles);
 
 function Filter({ isShowFilter, setShowFilter, callback, totalRecord }) {
+    const defaultFilter = { color: [], size: [], price: '' };
     const [isColorActive, setColorActive] = useState(false);
     const [isSizeActive, setSizeActive] = useState(false);
     const [isPriceActive, setPriceActive] = useState(false);
-    const [filters, setFilters] = useState({ color: [], size: [], price: '' });
+    const [filters, setFilters] = useState(defaultFilter);
 
     const handleCheckboxChange = (event) => {
         const { value, checked, type } = event.target; // include `type`
@@ -28,10 +29,19 @@ function Filter({ isShowFilter, setShowFilter, callback, totalRecord }) {
             return { ...prevFilters, [filterType]: updatedList };
         });
     };
+
+    const resetFilters = () => {
+        setFilters(defaultFilter);
+
+        document.querySelectorAll('.input-filter').forEach((input) => {
+            input.checked = false;
+        });
+    };
+
     useEffect(() => {
-        console.log(filters);
         callback(filters);
     }, [filters]);
+
     return (
         <div className={cx(isShowFilter ? 'show-filter' : '')}>
             <div className={cx('wrapper')}>
@@ -70,7 +80,7 @@ function Filter({ isShowFilter, setShowFilter, callback, totalRecord }) {
                                 data-content="Filter2"
                                 onClick={() => {
                                     setColorActive(!isColorActive);
-                                    setFilters({ ...filters });
+                                    //setFilters({ ...filters });
                                 }}
                             >
                                 <h4>Màu sắc</h4>
@@ -253,7 +263,7 @@ function Filter({ isShowFilter, setShowFilter, callback, totalRecord }) {
                 </div>
                 <div className={cx('result-filter')}>
                     <div className={cx('option-filter')}>
-                        <label>
+                        <label onClick={resetFilters}>
                             Xóa lọc
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -270,31 +280,35 @@ function Filter({ isShowFilter, setShowFilter, callback, totalRecord }) {
                                 <path d="M3 3.9165H5.44444V6.36095" stroke="black" strokeLinecap="square"></path>
                             </svg>
                         </label>
-                        <div className={cx('item-option-filter')}>
-                            <div className={cx('item-js-filter')} data-clear="Áo thun">
-                                Áo thun
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="8"
-                                    height="8"
-                                    viewBox="0 0 8 8"
-                                    fill="none"
-                                >
-                                    <path
-                                        d="M7.19995 0.800049L0.80005 7.20005"
-                                        stroke="#F8F8F8"
-                                        strokeLinecap="square"
-                                        strokeLinejoin="round"
-                                    ></path>
-                                    <path
-                                        d="M0.800049 0.800049L7.19995 7.20005"
-                                        stroke="#F8F8F8"
-                                        strokeLinecap="square"
-                                        strokeLinejoin="round"
-                                    ></path>
-                                </svg>
-                            </div>
-                        </div>
+                        {/* <div className={cx('item-option-filter')}>
+                                                        
+                                {dataClear.map((item, index) => (
+                                    <div className={cx('item-js-filter')} data-clear="Áo thun">
+                                    Áo thun
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="8"
+                                        height="8"
+                                        viewBox="0 0 8 8"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M7.19995 0.800049L0.80005 7.20005"
+                                            stroke="#F8F8F8"
+                                            strokeLinecap="square"
+                                            strokeLinejoin="round"
+                                        ></path>
+                                        <path
+                                            d="M0.800049 0.800049L7.19995 7.20005"
+                                            stroke="#F8F8F8"
+                                            strokeLinecap="square"
+                                            strokeLinejoin="round"
+                                        ></path>
+                                    </svg>   
+                                    </div> 
+                                ))}
+                            
+                        </div> */}
                     </div>
                     <div className={cx('total-filter')} onClick={() => setShowFilter(!isShowFilter)}>
                         <div className={cx('view-filter')}>

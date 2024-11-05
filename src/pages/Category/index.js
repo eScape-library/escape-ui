@@ -30,7 +30,7 @@ function Category() {
                 orderByClause !== undefined && orderByClause.length === 2
                     ? 'ORDER BY ' + orderByClause[0] + ' ' + orderByClause[1]
                     : null,
-            whereClause: JSON.stringify(whereClause),
+            whereClause: whereClause === null ? null : JSON.stringify(whereClause),
         };
         collectionService
             .getCollection(subCategoryId, paging)

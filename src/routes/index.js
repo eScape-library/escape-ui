@@ -6,7 +6,7 @@ import Account from '../pages/Account';
 // Use without login
 export const publicRoutes = [
     { path: '/collections/:subCategoryId', component: Category },
-    { path: '/details', component: ProductDetails },
+    { path: '/details/:productDetailsId', component: ProductDetails },
     { path: '/cart', component: Cart },
     { path: '/account', component: Account },
 ];
