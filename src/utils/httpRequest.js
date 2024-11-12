@@ -1,5 +1,12 @@
 import axios from 'axios';
 
+const token = localStorage.getItem('accessToken');
+
+// Cấu hình Axios để tự động thêm header Authorization cho tất cả request
+if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
+
 const request = axios.create({
     baseURL: 'https://localhost:7287/api/',
 });

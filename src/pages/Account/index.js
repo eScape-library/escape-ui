@@ -8,14 +8,25 @@ import Wishlist from './Wishlist';
 import Order from './Order';
 import Address from './Address';
 import Button from '../../components/Button';
+import * as authService from '../../apiServices/authService';
 
 import classNames from 'classnames/bind';
 import styles from './Account.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function Account() {
     const [active, setActive] = useState('profile');
+
+    const navigate = useNavigate();
+    const handelClick = () => {
+        authService
+            .logout()
+            .then(() => navigate('/login'))
+            .catch((err) => console.log(err));
+    };
+
     return (
         <div className="container">
             <p className={cx('main-title')}>Quản lí tài khoản</p>
@@ -64,7 +75,11 @@ function Account() {
                             >
                                 Địa chỉ giao hàng
                             </Button>
-                            <Button className={cx('option-btn')} leftIcon={<FontAwesomeIcon icon={faSignOut} />}>
+                            <Button
+                                onClick={handelClick}
+                                className={cx('option-btn')}
+                                leftIcon={<FontAwesomeIcon icon={faSignOut} />}
+                            >
                                 Đăng xuất
                             </Button>
                         </div>

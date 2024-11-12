@@ -4,9 +4,11 @@ import Cart from '../pages/Cart';
 import Account from '../pages/Account';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import Home from '../pages/Home';
 
 // Use without login
 export const publicRoutes = [
+    { path: '/', component: Home },
     { path: '/collections/:subCategoryId', component: Category },
     { path: '/details/:productDetailsId', component: ProductDetails },
     { path: '/cart', component: Cart },

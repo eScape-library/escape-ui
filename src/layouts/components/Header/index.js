@@ -4,6 +4,7 @@ import styles from './Header.module.scss';
 import Menu from '../../../components/Popper/Menu';
 import MiniSearch from '../../../components/MiniSearch';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import * as CategoryService from '../../../apiServices/categoryService';
 import * as SubCategoryService from '../../../apiServices/subCategoryService';
 
@@ -68,7 +69,7 @@ function Header() {
                         </a>
                     </div>
                     <div className={cx('right-icon', 'cart-icon')}>
-                        <a href="#">
+                        <Link to="/Cart">
                             <span className={cx('item-count-header')}>1</span>
                             <img
                                 src="https://file.hstatic.net/200000642007/file/icon-cart_d075fce117f74a07ae7f149d8943fc33.svg"
@@ -77,7 +78,7 @@ function Header() {
                                 width="24"
                                 height="24"
                             />
-                        </a>
+                        </Link>
                     </div>
                     <div className={cx('right-icon', 'wishlist-icon')}>
                         <a href="#">
@@ -91,7 +92,7 @@ function Header() {
                         </a>
                     </div>
                     <div className={cx('right-icon', 'profile-icon')}>
-                        <a href="#">
+                        <Link to="/account">
                             <img
                                 src="https://file.hstatic.net/200000642007/file/icon-account_5d386c88832c4872b857c0da62a81bbc.svg"
                                 data-src="https://file.hstatic.net/200000642007/file/icon-account_5d386c88832c4872b857c0da62a81bbc.svg"
@@ -99,7 +100,7 @@ function Header() {
                                 width="24"
                                 height="24"
                             />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
