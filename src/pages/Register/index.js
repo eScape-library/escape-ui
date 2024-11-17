@@ -3,12 +3,13 @@ import { faCircleUser, faEnvelope, faKey, faEyeSlash, faEye } from '@fortawesome
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import Button from '../../components/Button';
-import * as authService from '../../apiServices/authService';
 
 import classNames from 'classnames/bind';
 import styles from './Register.module.scss';
+import { register } from '../../redux/authSlice';
 
 const cx = classNames.bind(styles);
 
@@ -16,17 +17,10 @@ function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [typeInputPassword, setTypeInputPassword] = useState(true);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const handleSubmit = (values) => {
-        authService
-            .register(values)
-            .then(() => {
-                navigate('/login'); // Chuyển hướng khi đăng nhập thành công
-                window.scrollTo(0, 0);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    const handleSubmit = (user) => {
+        dispatch(register({ user, navigate }));
     };
 
     const formik = useFormik({
@@ -53,7 +47,6 @@ function Register() {
         }),
         onSubmit: (values) => {
             handleSubmit(values);
-            window.alert('Đăng ký thành công!');
         },
     });
     const handleShowPassword = () => {

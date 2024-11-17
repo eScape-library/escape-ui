@@ -1,38 +1,34 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser, faKey, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Button from '../../components/Button';
-import * as authService from '../../apiServices/authService';
 
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
+import { loginStatusSelector, registerStatusSelector } from '../../redux/selectors';
+import { login } from '../../redux/authSlice';
 
 const cx = classNames.bind(styles);
 
 function Login() {
-    const [loginErr, setLoginErr] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [typeInputPassword, setTypeInputPassword] = useState(true);
-    //const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleShowPassword = () => {
         setShowPassword((state) => !state);
         setTypeInputPassword((state) => !state);
     };
 
+    const status = useSelector(loginStatusSelector);
+    const isRegisterSuccess = useSelector(registerStatusSelector);
+
     const handleSubmit = (values) => {
-        authService
-            .login(values)
-            .then(() => {
-                navigate('/'); // Chuyển hướng khi đăng nhập thành công
-                window.scrollTo(0, 0);
-            })
-            .catch(() => {
-                setLoginErr(true); // Hiển thị lỗi đăng nhập
-            });
+        dispatch(login({ values, navigate }));
     };
 
     const formik = useFormik({
@@ -63,7 +59,9 @@ function Login() {
                     <p>Hoặc</p>
                 </div>
                 <div className={cx('spacer')}></div>
-
+                {isRegisterSuccess ? (
+                    <p className={cx('err-message')}>Đăng ký tài khoản thành công! Mời bạn đăng nhập.</p>
+                ) : undefined}
                 <div className={cx('form-group')}>
                     <div className={cx('input-form')}>
                         <span className={cx('icon')}>
@@ -110,7 +108,7 @@ function Login() {
                 <Button type="submit" className={cx('submit')}>
                     Đăng nhập
                 </Button>
-                {/* {loginErr ? undefined : <p className={cx('err-message')}>Tài khoản hoặc mật khẩu chưa chính xác!</p>} */}
+                {status ? <p className={cx('err-message')}>Tài khoản hoặc mật khẩu chưa chính xác!</p> : undefined}
                 <p className={cx('ask')}>
                     Quên mật khẩu?
                     <Button to="/register" underline className={cx('login')} href="">

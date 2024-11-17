@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle, faHeart, faFileText } from '@fortawesome/free-regular-svg-icons';
 import { faHistory, faSignOut, faMapMarked } from '@fortawesome/free-solid-svg-icons';
@@ -12,19 +11,19 @@ import * as authService from '../../apiServices/authService';
 
 import classNames from 'classnames/bind';
 import styles from './Account.module.scss';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../../redux/authSlice';
 
 const cx = classNames.bind(styles);
 
 function Account() {
     const [active, setActive] = useState('profile');
-
     const navigate = useNavigate();
-    const handelClick = () => {
-        authService
-            .logout()
-            .then(() => navigate('/login'))
-            .catch((err) => console.log(err));
+    const dispatch = useDispatch();
+    const handelLogout = () => {
+        dispatch(logout({ navigate }));
     };
 
     return (
@@ -76,7 +75,7 @@ function Account() {
                                 Địa chỉ giao hàng
                             </Button>
                             <Button
-                                onClick={handelClick}
+                                onClick={handelLogout}
                                 className={cx('option-btn')}
                                 leftIcon={<FontAwesomeIcon icon={faSignOut} />}
                             >

@@ -36,7 +36,7 @@ function Header() {
                 <div className={cx('menu')}>
                     <nav>
                         <ul>
-                            {categories.map((category, index) => (
+                            {categories?.map((category, index) => (
                                 <li key={index}>
                                     <Menu
                                         datas={subCategories.filter(
