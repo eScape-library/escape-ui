@@ -1,46 +1,44 @@
 import classNames from 'classnames/bind';
 import styles from './Filter.module.scss';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import filterSlice from './filterSlice';
 
 const cx = classNames.bind(styles);
 
-function Filter({ isShowFilter, setShowFilter, callback, totalRecord }) {
-    const defaultFilter = { color: [], size: [], price: '' };
+function Filter({ isShowFilter, setShowFilter, totalRecord }) {
     const [isColorActive, setColorActive] = useState(false);
     const [isSizeActive, setSizeActive] = useState(false);
     const [isPriceActive, setPriceActive] = useState(false);
-    const [filters, setFilters] = useState(defaultFilter);
+
+    const dispatch = useDispatch();
 
     const handleCheckboxChange = (event) => {
         const { value, checked, type } = event.target; // include `type`
         const [filterType, val] = value.split(':');
 
-        setFilters((prevFilters) => {
-            let updatedList;
-
-            if (type === 'checkbox') {
-                updatedList = checked
-                    ? [...prevFilters[filterType], val] // add if checked
-                    : prevFilters[filterType].filter((item) => item !== val); // remove if unchecked
-            } else if (type === 'radio') {
-                updatedList = checked ? val : '';
+        if (type === 'checkbox') {
+            if (filterType === 'color') {
+                checked
+                    ? dispatch(filterSlice.actions.addColorFilter(val))
+                    : dispatch(filterSlice.actions.removeColorFilter(val));
+            } else {
+                checked
+                    ? dispatch(filterSlice.actions.addSizeFilter(val))
+                    : dispatch(filterSlice.actions.removeSizeFilter(val));
             }
-
-            return { ...prevFilters, [filterType]: updatedList };
-        });
+        } else if (type === 'radio') {
+            dispatch(filterSlice.actions.updatePriceFilter(val));
+        }
     };
 
     const resetFilters = () => {
-        setFilters(defaultFilter);
+        dispatch(filterSlice.actions.resetFilter());
 
         document.querySelectorAll('.input-filter').forEach((input) => {
             input.checked = false;
         });
     };
-
-    useEffect(() => {
-        callback(filters);
-    }, [filters]);
 
     return (
         <div className={cx(isShowFilter ? 'show-filter' : '')}>

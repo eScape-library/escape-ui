@@ -5,21 +5,36 @@ import Product from '../../components/Product';
 import Pagination from '../../components/Pagination';
 import Filter from '../../components/Filter';
 import { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import * as collectionService from '../../apiServices/collectionService';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    collectionNameSelector,
+    collectionSelector,
+    filterSelector,
+    orderBySelector,
+    pageActiveSelector,
+    subCategoryIdSelector,
+} from '../../redux/selectors';
+import categorySlice, { getCollection } from './categorySlice';
 
 const cx = classNames.bind(styles);
 
 function Category() {
     const pageSize = 12;
-    const location = useLocation();
-    let { subCategoryId } = useParams();
-    const { collectionName } = location.state || {};
     const [toggleFilter, setToggleFilter] = useState(false);
-    const [collection, setCollection] = useState({});
-    const [page, setPage] = useState(1);
-    const [orderBy, setOrderBy] = useState(null);
-    const [whereClause, setWhereClause] = useState(null);
+
+    const dispatch = useDispatch();
+
+    const collection = useSelector(collectionSelector);
+
+    const orderBy = useSelector(orderBySelector);
+    const page = useSelector(pageActiveSelector);
+    const filter = useSelector(filterSelector);
+    const subCategoryId = useSelector(subCategoryIdSelector);
+    const collectionName = useSelector(collectionNameSelector);
+
+    const setOrderByClause = (value) => {
+        dispatch(categorySlice.actions.setOrderBy(value));
+    };
 
     useEffect(() => {
         const orderByClause = orderBy?.split('-');
@@ -30,14 +45,11 @@ function Category() {
                 orderByClause !== undefined && orderByClause.length === 2
                     ? 'ORDER BY ' + orderByClause[0] + ' ' + orderByClause[1]
                     : null,
-            whereClause: whereClause === null ? null : JSON.stringify(whereClause),
+            whereClause: filter === null ? null : JSON.stringify(filter),
         };
-        collectionService
-            .getCollection(subCategoryId, paging)
-            .then((data) => setCollection(data))
-            .catch((err) => console.log(err));
+        dispatch(getCollection({ subCategoryId, paging }));
         window.scrollTo(0, 0);
-    }, [subCategoryId, orderBy, whereClause, page]);
+    }, [subCategoryId, orderBy, filter, page, dispatch]);
 
     return (
         <div className={cx('wrapper', toggleFilter ? 'show-filter' : '')}>
@@ -141,7 +153,7 @@ function Category() {
                                     className="sort-by select2-hidden-accessible"
                                     tabIndex="-1"
                                     aria-hidden="true"
-                                    onChange={(e) => setOrderBy(e.target.value)}
+                                    onChange={(e) => setOrderByClause(e.target.value)}
                                 >
                                     <option value="">Sắp xếp</option>
                                     <option value="Price-asc">Giá: Tăng dần</option>
@@ -164,10 +176,9 @@ function Category() {
                         </div>
 
                         <Pagination
-                            id={subCategoryId}
                             totalRecord={collection.total}
                             pageSize={pageSize}
-                            callback={(data) => setPage(data)}
+                            //callback={(data) => setPage(data)}
                         />
                     </div>
                 ) : (
@@ -183,10 +194,10 @@ function Category() {
             <Filter
                 isShowFilter={toggleFilter}
                 setShowFilter={(toggleFilter) => setToggleFilter(toggleFilter)}
-                callback={(filters) => {
-                    setWhereClause(filters);
-                    setPage(1);
-                }}
+                // callback={(filters) => {
+                //     setWhereClause(filters);
+                //     setPage(1);
+                // }}
                 totalRecord={collection.total}
             />
             <div className={cx('overflay-filter')}></div>

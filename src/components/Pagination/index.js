@@ -1,30 +1,31 @@
 import classNames from 'classnames/bind';
 import styles from './Pagination.module.scss';
-import { useEffect, useState } from 'react';
-import * as collectionService from '../../apiServices/collectionService';
 import Button from '../Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { pageActiveSelector } from '../../redux/selectors';
+import paginationSlice from './paginationSlice';
 
 const cx = classNames.bind(styles);
 
-function Pagination({ id, totalRecord, pageSize, callback }) {
+function Pagination({ totalRecord, pageSize }) {
     const lastPage = Math.ceil(totalRecord / pageSize);
-    const [page, setPage] = useState(1);
-
+    const page = useSelector(pageActiveSelector);
+    const dispatch = useDispatch();
     let isNextButtonDisabled = page === lastPage;
     let isPreviousButtonDisabled = page === 1;
-    useEffect(() => {
-        callback(page);
-    }, [page]);
+    const handleSelectPage = (page) => {
+        dispatch(paginationSlice.actions.setPage(page));
+    };
 
     const handleNextPage = () => {
         if (page <= lastPage) {
-            setPage((page) => page + 1);
+            dispatch(paginationSlice.actions.setPage(page + 1));
         }
     };
 
     const handlePreviousPage = () => {
         if (page > 1) {
-            setPage((page) => page - 1);
+            dispatch(paginationSlice.actions.setPage(page - 1));
         }
     };
 
@@ -51,7 +52,7 @@ function Pagination({ id, totalRecord, pageSize, callback }) {
                             {index + 1}
                         </Button>
                     ) : (
-                        <Button circle className={cx('item-pagi')} onClick={() => setPage(index + 1)}>
+                        <Button circle className={cx('item-pagi')} onClick={() => handleSelectPage(index + 1)}>
                             {index + 1}
                         </Button>
                     ),
