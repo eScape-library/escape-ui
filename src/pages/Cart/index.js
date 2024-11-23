@@ -269,7 +269,7 @@ function Cart() {
                 </div>
             </div>
             {showPopup && (
-                <Popup setShowPopup={setShowPopup}>
+                <Popup setShowPopup={setShowPopup} maxWidth={850}>
                     <UpdateCart />
                 </Popup>
             )}

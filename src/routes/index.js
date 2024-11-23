@@ -12,10 +12,9 @@ export const publicRoutes = [
     { path: '/collections/:subCategoryId', component: Category },
     { path: '/details/:productDetailsId', component: ProductDetails },
     { path: '/cart', component: Cart },
-    { path: '/account', component: Account },
     { path: '/login', component: Login },
     { path: '/register', component: Register },
 ];
 
 // Routes need to login to use
-export const privateRoutes = [];
+export const privateRoutes = [{ path: '/account', component: Account }];

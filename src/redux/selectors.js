@@ -1,5 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
+export const userSelector = (state) => state.user.user;
+export const isUpdatedSelector = (state) => state.user.isUpdated;
 export const loginStatusSelector = (state) => state.auth.login.error;
 export const registerStatusSelector = (state) => state.auth.register.success;
 export const pageActiveSelector = (state) => state.pagination;

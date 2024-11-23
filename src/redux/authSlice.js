@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as authService from '../apiServices/authService';
+import userSlice, { getUser } from '../pages/Account/Profile/userSlice';
 
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
         login: {
-            currentUser: null,
             isFetching: false, //Loading
             error: false,
         },
@@ -26,7 +26,6 @@ const authSlice = createSlice({
                 state.login.isFetching = true;
             })
             .addCase(login.fulfilled, (state, action) => {
-                state.login.currentUser = action.payload;
                 state.login.isFetching = false;
             })
             .addCase(login.rejected, (state) => {
@@ -37,7 +36,6 @@ const authSlice = createSlice({
                 state.logout.isFetching = true;
             })
             .addCase(logout.fulfilled, (state) => {
-                state.login.currentUser = {};
                 state.logout.isFetching = false;
                 state.register.success = false;
             })
@@ -59,21 +57,21 @@ const authSlice = createSlice({
     },
 });
 
-export const login = createAsyncThunk('auth/login', async ({ values, navigate }) => {
+export const login = createAsyncThunk('auth/login', async ({ values, navigate }, { dispatch }) => {
     try {
-        const user = await authService.login(values);
-        console.log(user);
+        await authService.login(values);
+        dispatch(getUser(values?.username));
         navigate('/');
-        return user;
     } catch (error) {
         console.log(error);
         throw error;
     }
 });
 
-export const logout = createAsyncThunk('auth/logout', async ({ navigate }) => {
+export const logout = createAsyncThunk('auth/logout', async ({ navigate }, { dispatch }) => {
     try {
         await authService.logout();
+        dispatch(userSlice.actions.disableUser());
         navigate('/login');
     } catch (error) {
         throw error;
@@ -82,7 +80,6 @@ export const logout = createAsyncThunk('auth/logout', async ({ navigate }) => {
 
 export const register = createAsyncThunk('auth/register', async ({ user, navigate }) => {
     try {
-        console.log(user);
         await authService.register(user);
         navigate('/login');
     } catch (error) {

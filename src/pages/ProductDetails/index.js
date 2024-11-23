@@ -53,10 +53,10 @@ function ProductDetails() {
                         <div id="carouselExample" className="carousel slide">
                             <div className="carousel-inner">
                                 <div className="carousel-item active">
-                                    <img src={product.product?.productImage} className="d-block w-100" alt="..." />
+                                    <img src={product?.product?.productImage} className="d-block w-100" alt="..." />
                                 </div>
                                 <div className="carousel-item">
-                                    <img src={product.product?.subImage} className="d-block w-100" alt="..." />
+                                    <img src={product?.product?.subImage} className="d-block w-100" alt="..." />
                                 </div>
                             </div>
                             <button
@@ -83,7 +83,7 @@ function ProductDetails() {
                         <div className={cx('info-product-detail')}>
                             <div className={cx('heading-product-detail')}>
                                 <div className={cx('title-product-detail')}>
-                                    <h1>{product.product?.productName}</h1>
+                                    <h1>{product?.product?.productName}</h1>
                                 </div>
                                 <div className={cx('wishlist-product-detail')}>
                                     <a href="#" className={cx('sharing-product')}>
@@ -141,9 +141,9 @@ function ProductDetails() {
                                 </div>
                             </div>
                             <div className={cx('price-product-detail')}>
-                                <span>{product.product?.price}₫</span>
+                                <span>{product?.product?.price}₫</span>
                             </div>
-                            <SwatchColor data={product.variants} activeColor={product.product?.color} />
+                            <SwatchColor data={product?.variants} activeColor={product?.product?.color} />
                             <div className={cx('selector-product-detail')}>
                                 <div className={cx('selector-product-detail-inner')}>
                                     <div className={cx('option-swatch')}>
@@ -176,7 +176,7 @@ function ProductDetails() {
                                             </span>
                                         </div>
 
-                                        <SwatchSize data={sizeVariants} activeSize={product.product?.size} />
+                                        <SwatchSize data={sizeVariants} activeSize={product?.product?.size} />
                                     </div>
 
                                     <div className={cx('action-detail')}>
@@ -219,7 +219,7 @@ function ProductDetails() {
                                 <div className={cx('content-tab-description')}>
                                     <div className={cx('item-content-tab', tabInfo ? 'active' : '')}>
                                         <div>
-                                            <p>{product.product?.description}</p>
+                                            <p>{product?.product?.description}</p>
                                         </div>
                                     </div>
                                     <div className={cx('item-content-tab', tabStorage ? 'active' : '')}>
@@ -235,7 +235,7 @@ function ProductDetails() {
                         </div>
                     </div>
                 </div>
-                <MultiItemCarousel title="Có thể bạn cũng thích" datas={product.familiar} />
+                <MultiItemCarousel title="Có thể bạn cũng thích" datas={product?.familiar} />
                 <MultiItemCarousel title="Sản phẩm đã xem" />
             </div>
         </div>

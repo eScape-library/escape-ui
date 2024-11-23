@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function Popup({ children, setShowPopup }) {
+function Popup({ children, setShowPopup, maxWidth }) {
     const [isOpenP, setIsOpen] = useState(false);
     useEffect(() => {
         setIsOpen(true);
@@ -19,7 +19,7 @@ function Popup({ children, setShowPopup }) {
             >
                 <div className={cx('bg')}></div>
                 <div className={cx('main-content')}>
-                    <div className={cx('content', 'update')}>
+                    <div className={cx('content', 'update')} style={{ maxWidth: `${maxWidth}px` }}>
                         <div className={cx('wrapper-update')}>
                             {children}
                             <button

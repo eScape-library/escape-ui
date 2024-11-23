@@ -5,7 +5,6 @@ export const login = async (data) => {
         const res = await request.post(`auth/login`, data);
         localStorage.setItem('accessToken', res.data?.accessToken);
         localStorage.setItem('refreshToken', res.data?.refreshToken);
-        return res.data?.user;
     } catch (err) {
         throw err;
     }

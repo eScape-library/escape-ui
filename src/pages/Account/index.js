@@ -11,10 +11,12 @@ import * as authService from '../../apiServices/authService';
 
 import classNames from 'classnames/bind';
 import styles from './Account.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/authSlice';
+import { jwtDecode } from 'jwt-decode';
+import { getUser } from './Profile/userSlice';
 
 const cx = classNames.bind(styles);
 
@@ -25,6 +27,14 @@ function Account() {
     const handelLogout = () => {
         dispatch(logout({ navigate }));
     };
+
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            const decodedData = jwtDecode(token);
+            dispatch(getUser(decodedData.username));
+        }
+    }, []);
 
     return (
         <div className="container">
