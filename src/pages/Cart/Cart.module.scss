@@ -84,8 +84,10 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    cursor: pointer;
 
-    a {
+    a,
+    button {
         border: 1px solid #e8e8e8;
         border-radius: 2px;
         padding: 6px 8px;
@@ -171,4 +173,25 @@
     border-radius: 0 0 8px 8px;
     height: 56px;
     text-transform: uppercase;
+}
+
+.empty-cart {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 0;
+}
+
+.text-empty-cart {
+    font-size: 16px;
+    line-height: 24px;
+    margin: 24px 0;
+}
+
+.title-item {
+    cursor: pointer;
+    &:hover {
+        color: var(--primary-color);
+    }
 }

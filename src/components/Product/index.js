@@ -2,29 +2,33 @@ import classNames from 'classnames/bind';
 import styles from './Product.module.scss';
 import { colors } from '../../sampleDatas';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector } from '../../redux/selectors';
+import { useState } from 'react';
+import Notification from '../../components/Notification';
+import { addToCart } from '../../pages/Cart/cartSlice';
+
 const cx = classNames.bind(styles);
 
-const sample = [
-    {
-        productImage:
-            'https://product.hstatic.net/200000642007/product/07pkm_3atsn0343_1_05e8ff7849804658b83b742bcc55229b_3fce77bba63240139cba860f6129a782_master.jpg',
-        subImage:
-            'https://product.hstatic.net/200000642007/product/07pkm_3atsn0343_2_7346ec7ae281413f98fb06f39a4aa10a_001fff5cf976498b825497b3ad5deebe_master.jpg',
-        productName: 'Áo thun unisex cổ tròn tay ngắn Vintage Big Logo Graphic',
-        price: '1,690,000',
-        availableColors: 'Pink,White',
-    },
-];
-
-function Product({ className, data = sample }) {
+function Product({ className, data = {} }) {
+    const [addToCartSuccess, setAddToCartSuccess] = useState(false);
     var orthers = data.availableColors.split(',');
     const navigate = useNavigate();
+    const user = useSelector(userSelector);
+    const dispatch = useDispatch();
+
     const handleClick = () => {
         navigate(`/details/${data.productDetailsId}`);
     };
 
+    const handleAddToCart = () => {
+        dispatch(addToCart({ userId: user.userId, productDetailsId: data.productDetailsId, quantity: 1 })).then(() =>
+            setAddToCartSuccess(true),
+        );
+    };
+
     return (
-        <div className={className} onClick={handleClick}>
+        <div className={className}>
             <div className={cx('media')}>
                 <a className={cx('image')}>
                     <picture>
@@ -34,7 +38,7 @@ function Product({ className, data = sample }) {
                         <img src={data.subImage} alt={data.productName} />
                     </picture>
                 </a>
-                <div className={cx('icon-addtocart-loop')}>
+                <div className={cx('icon-addtocart-loop')} onClick={handleAddToCart}>
                     <img
                         alt={data.productName}
                         src="https://file.hstatic.net/200000642007/file/shopping-cart_3475f727ea204ccfa8fa7c70637d1d06.svg"
@@ -43,7 +47,7 @@ function Product({ className, data = sample }) {
             </div>
 
             <div className={cx('details')}>
-                <div className={cx('title')}>
+                <div className={cx('title')} onClick={handleClick}>
                     <p>
                         <a>{data.productName}</a>
                     </p>
@@ -61,6 +65,14 @@ function Product({ className, data = sample }) {
                     ))}
                 </div>
             </div>
+
+            {addToCartSuccess === true && (
+                <Notification
+                    title="Đã thêm vào giỏ hàng!"
+                    product={data}
+                    callback={(state) => setAddToCartSuccess(state)}
+                />
+            )}
         </div>
     );
 }

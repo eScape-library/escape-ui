@@ -66,4 +66,9 @@ export const patch = async (path, data) => {
     return response;
 };
 
+export const remove = async (path, data) => {
+    const response = await request.delete(path, data);
+    return response;
+};
+
 export default request;

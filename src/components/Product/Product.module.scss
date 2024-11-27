@@ -47,6 +47,7 @@
 
 .title {
     min-height: 61px;
+    cursor: pointer;
     p {
         font-size: 17px;
         font-weight: 500;
@@ -57,6 +58,10 @@
         word-wrap: break-word;
         white-space: normal;
         overflow: hidden;
+    }
+
+    &:hover {
+        color: var(--primary-color);
     }
 }
 

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function SwatchSize({ data, activeSize }) {
+function SwatchSize({ data, activeSize, callback }) {
     const [sizes, setSizes] = useState([]);
     const navigate = useNavigate();
 
@@ -19,7 +19,8 @@ function SwatchSize({ data, activeSize }) {
                 <div
                     className={cx('item-swatch', activeSize === item?.size && 'active')}
                     key={index}
-                    onClick={() => navigate(`/details/${item?.productDetailsId}`)}
+                    //onClick={() => navigate(`/details/${item?.productDetailsId}`)}
+                    onClick={() => callback(item?.productDetailsId)}
                 >
                     {item?.size}
                 </div>

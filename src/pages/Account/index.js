@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/authSlice';
 import { jwtDecode } from 'jwt-decode';
 import { getUser } from './Profile/userSlice';
+import cartSlice from '../Cart/cartSlice';
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +27,7 @@ function Account() {
     const dispatch = useDispatch();
     const handelLogout = () => {
         dispatch(logout({ navigate }));
+        dispatch(cartSlice.actions.setDefaultCart());
     };
 
     useEffect(() => {

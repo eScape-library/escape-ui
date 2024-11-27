@@ -5,7 +5,7 @@ import { colors as colorsSample } from '../../sampleDatas';
 
 const cx = classNames.bind(styles);
 
-function SwatchColor({ data, activeColor }) {
+function SwatchColor({ data, activeColor, callback }) {
     const navigate = useNavigate();
 
     return (
@@ -14,7 +14,8 @@ function SwatchColor({ data, activeColor }) {
                 <div
                     key={index}
                     className={cx('item-swatch', activeColor === item.variantColor.color && 'active')}
-                    onClick={() => navigate(`/details/${item.variantColor.productDetailsId}`)}
+                    //onClick={() => navigate(`/details/${item.variantColor.productDetailsId}`)}
+                    onClick={() => callback(item.variantColor.productDetailsId)}
                 >
                     <img src={colorsSample.find((color) => color.name === item.variantColor.color).image} alt="43bks" />
                 </div>

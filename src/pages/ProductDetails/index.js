@@ -2,21 +2,34 @@ import classNames from 'classnames/bind';
 import styles from './ProductDetails.module.scss';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../redux/selectors';
 import MultiItemCarousel from '../../components/MultiItemCarousel';
 import SwatchColor from '../../components/SwatchColor';
 import SwatchSize from '../../components/SwatchSize';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import Notification from '../../components/Notification';
 import * as ProductDetailsService from '../../apiServices/productDetailsService';
+import * as cartService from '../../apiServices/cartService';
 
 const cx = classNames.bind(styles);
 
 function ProductDetails() {
+    let { productDetailsId } = useParams();
     const [tabInfo, setTabInfo] = useState(true);
     const [tabStorage, setTabStorage] = useState(false);
+    const [pDId, setPDId] = useState(productDetailsId);
     const [product, setProduct] = useState({});
     const [sizeVariants, setSizeVariants] = useState([]);
-    let { productDetailsId } = useParams();
+    const [addToCartSuccess, setAddToCartSuccess] = useState(false);
+    const user = useSelector(userSelector);
+
+    const addToCart = () => {
+        cartService
+            .addToCart({ userId: user.userId, productDetailsId: productDetailsId, quantity: 1 })
+            .then(() => setAddToCartSuccess(true));
+    };
 
     const handleTabStorage = () => {
         setTabStorage(true);
@@ -29,7 +42,7 @@ function ProductDetails() {
     };
 
     useEffect(() => {
-        var variant = product.variants?.filter((variant) => {
+        var variant = product?.variants?.filter((variant) => {
             for (const element of variant.variantSize) {
                 if (element.productDetailsId === product.product?.productDetailsId) return true;
             }
@@ -39,11 +52,11 @@ function ProductDetails() {
     }, [product]);
 
     useEffect(() => {
-        ProductDetailsService.getProductDetailsById(productDetailsId)
+        ProductDetailsService.getProductDetailsById(pDId)
             .then((data) => setProduct(data))
             .catch((err) => console.log(err));
         window.scrollTo(0, 0);
-    }, [productDetailsId]);
+    }, [pDId]);
 
     return (
         <div className={cx('wrapper')}>
@@ -143,7 +156,11 @@ function ProductDetails() {
                             <div className={cx('price-product-detail')}>
                                 <span>{product?.product?.price}₫</span>
                             </div>
-                            <SwatchColor data={product?.variants} activeColor={product?.product?.color} />
+                            <SwatchColor
+                                data={product?.variants}
+                                activeColor={product?.product?.color}
+                                callback={(id) => setPDId(id)}
+                            />
                             <div className={cx('selector-product-detail')}>
                                 <div className={cx('selector-product-detail-inner')}>
                                     <div className={cx('option-swatch')}>
@@ -176,11 +193,17 @@ function ProductDetails() {
                                             </span>
                                         </div>
 
-                                        <SwatchSize data={sizeVariants} activeSize={product?.product?.size} />
+                                        <SwatchSize
+                                            data={sizeVariants}
+                                            activeSize={product?.product?.size}
+                                            callback={(id) => setPDId(id)}
+                                        />
                                     </div>
 
                                     <div className={cx('action-detail')}>
-                                        <button id="btn-addtocart">Thêm vào giỏ</button>
+                                        <button id="btn-addtocart" onClick={addToCart}>
+                                            Thêm vào giỏ
+                                        </button>
                                         <button className={cx('btn-buynow')} id="btn-buynow">
                                             Mua ngay
                                         </button>
@@ -238,6 +261,14 @@ function ProductDetails() {
                 <MultiItemCarousel title="Có thể bạn cũng thích" datas={product?.familiar} />
                 <MultiItemCarousel title="Sản phẩm đã xem" />
             </div>
+
+            {addToCartSuccess === true && (
+                <Notification
+                    title="Đã thêm vào giỏ hàng!"
+                    product={product.product}
+                    callback={(state) => setAddToCartSuccess(state)}
+                />
+            )}
         </div>
     );
 }

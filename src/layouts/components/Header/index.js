@@ -5,8 +5,11 @@ import Menu from '../../../components/Popper/Menu';
 import MiniSearch from '../../../components/MiniSearch';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCartItems } from '../../../pages/Cart/cartSlice';
 import * as CategoryService from '../../../apiServices/categoryService';
 import * as SubCategoryService from '../../../apiServices/subCategoryService';
+import { cartTotalSelector, userSelector } from '../../../redux/selectors';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +17,9 @@ function Header() {
     const [showSearch, setShowSearch] = useState(false);
     const [categories, setCategories] = useState([]);
     const [subCategories, setsubCategories] = useState([]);
+    const dispatch = useDispatch();
+    const user = useSelector(userSelector);
+    const cartTotal = useSelector(cartTotalSelector);
 
     useEffect(() => {
         SubCategoryService.getSubCategoryByCategoryID()
@@ -21,12 +27,18 @@ function Header() {
             .catch((err) => console.log(err));
         window.scrollTo(0, 0);
     }, []);
+
     useEffect(() => {
         CategoryService.getAllCategories()
             .then((data) => setCategories(data))
             .catch((err) => console.log(err));
         window.scrollTo(0, 0);
     }, []);
+
+    useEffect(() => {
+        dispatch(getAllCartItems());
+    }, [user]);
+
     return (
         <header className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -70,7 +82,7 @@ function Header() {
                     </div>
                     <div className={cx('right-icon', 'cart-icon')}>
                         <Link to="/Cart">
-                            <span className={cx('item-count-header')}>1</span>
+                            <span className={cx('item-count-header')}>{cartTotal}</span>
                             <img
                                 src="https://file.hstatic.net/200000642007/file/icon-cart_d075fce117f74a07ae7f149d8943fc33.svg"
                                 data-src="https://file.hstatic.net/200000642007/file/icon-cart_d075fce117f74a07ae7f149d8943fc33.svg"

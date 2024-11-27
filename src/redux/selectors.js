@@ -10,3 +10,7 @@ export const subCategoryIdSelector = (state) => state.category.subCategoryId;
 export const collectionNameSelector = (state) => state.category.collectionName;
 export const orderBySelector = (state) => state.category.orderBy;
 export const collectionSelector = (state) => state.category.collection;
+export const cartItemsSelector = (state) => state.cart.cartItems;
+export const cartTotalSelector = (state) => state.cart.total;
+export const selectedItemSelector = (state) => state.cart.selectedItem.items;
+export const totalPriceSelector = (state) => state.cart.selectedItem.totalPrice;
