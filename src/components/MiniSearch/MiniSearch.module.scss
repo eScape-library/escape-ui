@@ -3,7 +3,7 @@
     top: 0;
     z-index: 9;
     background: #ffffff;
-    min-height: 584px;
+    min-height: 100%;
     width: 100%;
 }
 
@@ -150,6 +150,7 @@
 .item-product-search {
     display: flex;
     align-items: center;
+    margin: 10px 0;
 }
 
 .media-product-search {
@@ -159,4 +160,8 @@
 .title-product-search {
     width: calc(100% - 48px);
     padding-left: 12px;
+    cursor: pointer;
+    a:hover {
+        color: var(--primary-color);
+    }
 }

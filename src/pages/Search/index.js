@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import styles from './Category.module.scss';
+import styles from './Search.module.scss';
 
 import Product from '../../components/Product';
 import Pagination from '../../components/Pagination';
@@ -7,37 +7,33 @@ import Filter from '../../components/Filter';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    collectionNameSelector,
-    collectionSelector,
+    collectionSearchSelector,
     filterSelector,
-    orderBySelector,
+    orderBySearchSelector,
     pageActiveSelector,
-    subCategoryIdSelector,
+    productNameSearchSelector,
 } from '../../redux/selectors';
-import categorySlice, { getCollection } from './categorySlice';
+import searchSlice, { searchProducts } from './searchSlice';
 
 const cx = classNames.bind(styles);
 
-function Category() {
+function Search() {
     const pageSize = 12;
     const [toggleFilter, setToggleFilter] = useState(false);
-
     const dispatch = useDispatch();
-
-    const collection = useSelector(collectionSelector);
-
-    const orderBy = useSelector(orderBySelector);
+    const collection = useSelector(collectionSearchSelector);
+    const orderBy = useSelector(orderBySearchSelector);
+    const productName = useSelector(productNameSearchSelector);
     const page = useSelector(pageActiveSelector);
     const filter = useSelector(filterSelector);
-    const subCategoryId = useSelector(subCategoryIdSelector);
-    const collectionName = useSelector(collectionNameSelector);
 
     const setOrderByClause = (value) => {
-        dispatch(categorySlice.actions.setOrderBy(value));
+        dispatch(searchSlice.actions.setOrderBy(value));
     };
 
     useEffect(() => {
         const orderByClause = orderBy?.split('-');
+        const whereClause = { productName };
         const paging = {
             pageSize: pageSize,
             pageNumber: page,
@@ -45,16 +41,16 @@ function Category() {
                 orderByClause !== undefined && orderByClause.length === 2
                     ? 'ORDER BY ' + orderByClause[0] + ' ' + orderByClause[1]
                     : null,
-            whereClause: filter === null ? null : JSON.stringify(filter),
+            whereClause: filter === null ? JSON.stringify(whereClause) : JSON.stringify({ ...whereClause, ...filter }),
         };
-        dispatch(getCollection({ subCategoryId, paging }));
+        dispatch(searchProducts(paging));
         window.scrollTo(0, 0);
-    }, [subCategoryId, orderBy, filter, page, dispatch]);
+    }, [productName, orderBy, filter, page, dispatch]);
 
     return (
         <div className={cx('wrapper', toggleFilter ? 'show-filter' : '')}>
             <div className={cx('main-title')}>
-                <h1>{collectionName}</h1>
+                <h1>Kết quả tìm được ({collection?.total ?? 0})</h1>
             </div>
             <div className={cx('title-collection')}>
                 <div className={cx('title-collection-inner')}>
@@ -201,4 +197,4 @@ function Category() {
     );
 }
 
-export default Category;
+export default Search;

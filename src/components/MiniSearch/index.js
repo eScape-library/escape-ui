@@ -1,22 +1,76 @@
 import classNames from 'classnames/bind';
 import styles from './MiniSearch.module.scss';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import searchSlice from '../../pages/Search/searchSlice';
+import { useNavigate } from 'react-router-dom';
+import * as searchService from '../../apiServices/searchProductsService';
+import { historySearchSelector } from '../../redux/selectors';
 
 const cx = classNames.bind(styles);
 
 function MiniSearch({ showSearch = false, callback }) {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedTerm, setDebouncedTerm] = useState('');
+    const [results, setResult] = useState({});
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const historySearch = useSelector(historySearchSelector);
+
+    const handleSearch = () => {
+        callback(false);
+        navigate('/search');
+        dispatch(searchSlice.actions.setProductName(searchTerm));
+        dispatch(searchSlice.actions.addToHistory(debouncedTerm));
+    };
+
+    const handleHistorySearch = (item) => {
+        callback(false);
+        dispatch(searchSlice.actions.setProductName(searchTerm));
+        dispatch(searchSlice.actions.setProductName(item));
+        navigate('/search');
+    };
+
+    const handleRemoveHistory = () => {
+        dispatch(searchSlice.actions.removeAllHistory());
+    };
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedTerm(searchTerm);
+        }, 1000);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [searchTerm]);
+
+    useEffect(() => {
+        if (debouncedTerm.trim()) {
+            searchService
+                .searchProducts({
+                    pageSize: 6,
+                    pageNumber: 1,
+                    whereClause: JSON.stringify({ productName: debouncedTerm }),
+                })
+                .then((data) => setResult(data))
+                .catch((error) => console.error(error));
+        } else setResult({});
+    }, [debouncedTerm, dispatch]);
     return (
         <div className={cx('wrapper', showSearch ? 'active' : 'd-none')}>
             <div className={cx('mini-search-inner')}>
                 <div className={cx('form-mini-search')}>
-                    <form className={cx('form-search')} action="/search">
+                    <div className={cx('form-search')} onSubmit={(e) => e.preventDefault()}>
                         <input type="hidden" name="type" value="product" />
                         <input
                             type="text"
-                            name="q"
                             className={cx('input-search')}
                             placeholder="#Giày MLB Chunky Liner"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                        <button type="submit">
+                        <button type="button" onClick={handleSearch}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="23"
@@ -33,7 +87,10 @@ function MiniSearch({ showSearch = false, callback }) {
                                 ></path>{' '}
                             </svg>
                         </button>
-                        <span className={cx('clear-text-search', 'd-none')}>
+                        <span
+                            className={cx('clear-text-search', searchTerm === '' ? 'd-none' : '')}
+                            onClick={() => setSearchTerm('')}
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -57,84 +114,21 @@ function MiniSearch({ showSearch = false, callback }) {
                                 ></path>{' '}
                             </svg>
                         </span>
-                    </form>
-                    <div className={cx('result-search')}>
+                    </div>
+                    <div className={cx('result-search', searchTerm === '' ? 'd-none' : '')}>
                         <div className={cx('list-result-search')}>
-                            <div className={cx('item-product-search')}>
-                                <div className={cx('media-product-search')}>
-                                    <a href="/products/mlb-ao-khoac-denim-basic-la-31jpn3011-4">
-                                        <img
-                                            src="//product.hstatic.net/200000642007/product/07u_31jpn3011_1_ec1c78c5bb4b4ae6a3b19d69a7f98780_5df78814070b4e388d65894535561d8b_grande.jpg"
-                                            alt="MLB - Áo khoác denim basic LA"
-                                        />
-                                    </a>
+                            {results.items?.map((product, index) => (
+                                <div key={index} className={cx('item-product-search')}>
+                                    <div className={cx('media-product-search')}>
+                                        <a href={`/details/${product?.productDetailsId}`}>
+                                            <img src={product?.productImage} alt={product?.productName} />
+                                        </a>
+                                    </div>
+                                    <div className={cx('title-product-search')}>
+                                        <a href={`/details/${product?.productDetailsId}`}>{product?.productName}</a>
+                                    </div>
                                 </div>
-                                <div className={cx('title-product-search')}>
-                                    <a href="/products/mlb-ao-khoac-denim-basic-la-31jpn3011-4">
-                                        MLB - Áo khoác denim basic LA
-                                    </a>
-                                </div>
-                            </div>
-                            <div className={cx('item-product-search')}>
-                                <div className={cx('media-product-search')}>
-                                    <a href="/products/mlb-ao-khoac-denim-basic-la-31jpn3011-3">
-                                        <img
-                                            src="//product.hstatic.net/200000642007/product/50u_31jpn3011_1_4b168b86ac284a2eb7c6ddd7e69b4cef_619d50a250c74cfe8ea6302454b2c73e_grande.jpg"
-                                            alt="MLB - Áo khoác denim basic LA"
-                                        />
-                                    </a>
-                                </div>
-                                <div className={cx('title-product-search')}>
-                                    <a href="/products/mlb-ao-khoac-denim-basic-la-31jpn3011-3">
-                                        MLB - Áo khoác denim basic LA
-                                    </a>
-                                </div>
-                            </div>
-                            <div className={cx('item-product-search')}>
-                                <div className={cx('media-product-search')}>
-                                    <a href="/products/mlb-ao-khoac-bong-chay-monogram-5">
-                                        <img
-                                            src="//product.hstatic.net/200000642007/product/50l_31jpm1011_1_6dff173d82c049f1b92c2985c4d4c6f6_3fa3a28fd8fe48ea8493312ae6df7d4d_grande.jpg"
-                                            alt="MLB - Áo khoác bóng chày Monogram"
-                                        />
-                                    </a>
-                                </div>
-                                <div className={cx('title-product-search')}>
-                                    <a href="/products/mlb-ao-khoac-bong-chay-monogram-5">
-                                        MLB - Áo khoác bóng chày Monogram
-                                    </a>
-                                </div>
-                            </div>
-                            <div className={cx('item-product-search')}>
-                                <div className={cx('media-product-search')}>
-                                    <a href="/products/mlb-ao-khoac-bong-chay-monogram-4">
-                                        <img
-                                            src="//product.hstatic.net/200000642007/product/50n_31jpm1011_1_52fe449613a94db1bd06f4c5514925ea_4de09636609440d09699f3fddd5e8a6f_grande.jpg"
-                                            alt="MLB - Áo khoác bóng chày Monogram"
-                                        />
-                                    </a>
-                                </div>
-                                <div className={cx('title-product-search')}>
-                                    <a href="/products/mlb-ao-khoac-bong-chay-monogram-4">
-                                        MLB - Áo khoác bóng chày Monogram
-                                    </a>
-                                </div>
-                            </div>
-                            <div className={cx('item-product-search')}>
-                                <div className={cx('media-product-search')}>
-                                    <a href="/products/mlb-ao-khoac-bong-chay-monogram-3">
-                                        <img
-                                            src="//product.hstatic.net/200000642007/product/07i_31jpm1011_1_484d3e0847d54734a7b7cffa994fdd67_12ccde54211142da8266250e6822fee1_grande.jpg"
-                                            alt="MLB - Áo khoác bóng chày Monogram"
-                                        />
-                                    </a>
-                                </div>
-                                <div className={cx('title-product-search')}>
-                                    <a href="/products/mlb-ao-khoac-bong-chay-monogram-3">
-                                        MLB - Áo khoác bóng chày Monogram
-                                    </a>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -142,12 +136,16 @@ function MiniSearch({ showSearch = false, callback }) {
                     <div className={cx('history-search')}>
                         <div className={cx('title-history')}>
                             <h4>Lịch sử tìm kiếm</h4>
-                            <span className={cx('clear-key-search')}>Xóa hết</span>
+                            <span className={cx('clear-key-search')} onClick={handleRemoveHistory}>
+                                Xóa hết
+                            </span>
                         </div>
                         <ul>
-                            <li>
-                                <a href="#">ao</a>
-                            </li>
+                            {historySearch.map((item, index) => (
+                                <li key={index} onClick={() => handleHistorySearch(item)}>
+                                    <a href="#">{item}</a>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </div>

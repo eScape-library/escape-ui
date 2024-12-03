@@ -14,3 +14,7 @@ export const cartItemsSelector = (state) => state.cart.cartItems;
 export const cartTotalSelector = (state) => state.cart.total;
 export const selectedItemSelector = (state) => state.cart.selectedItem.items;
 export const totalPriceSelector = (state) => state.cart.selectedItem.totalPrice;
+export const orderBySearchSelector = (state) => state.search.orderBy;
+export const collectionSearchSelector = (state) => state.search.collection;
+export const productNameSearchSelector = (state) => state.search.productName;
+export const historySearchSelector = (state) => state.search.history;

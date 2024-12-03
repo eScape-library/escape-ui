@@ -56,7 +56,7 @@ function ProductDetails() {
             .then((data) => setProduct(data))
             .catch((err) => console.log(err));
         window.scrollTo(0, 0);
-    }, [pDId]);
+    }, [pDId, productDetailsId]);
 
     return (
         <div className={cx('wrapper')}>

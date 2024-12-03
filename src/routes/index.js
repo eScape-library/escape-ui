@@ -5,6 +5,7 @@ import Account from '../pages/Account';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Home from '../pages/Home';
+import Search from '../pages/Search';
 
 // Use without login
 export const publicRoutes = [
@@ -14,6 +15,7 @@ export const publicRoutes = [
     { path: '/cart', component: Cart },
     { path: '/login', component: Login },
     { path: '/register', component: Register },
+    { path: '/search', component: Search },
 ];
 
 // Routes need to login to use

@@ -5,6 +5,7 @@ import paginationSlice from '../components/Pagination/paginationSlice';
 import categorySlice from '../pages/Category/categorySlice';
 import userSlice from '../pages/Account/Profile/userSlice';
 import cartSlice from '../pages/Cart/cartSlice';
+import searchSlice from '../pages/Search/searchSlice';
 
 const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
         category: categorySlice.reducer,
         user: userSlice.reducer,
         cart: cartSlice.reducer,
+        search: searchSlice.reducer,
     },
 });
 
